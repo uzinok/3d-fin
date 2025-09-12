@@ -1,11 +1,11 @@
-import Index from "../pages/index";
+import Home from "../pages/home/home";
 import { GlobalStyle } from "./styles";
 
 function App() {
 	return (
 		<>
 			<GlobalStyle />
-			<Index />
+			<Home />
 		</>
 	);
 }

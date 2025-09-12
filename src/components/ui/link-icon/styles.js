@@ -8,11 +8,11 @@ export const StyledIcon = styled.a`
 	text-decoration: none;
 	transition: opacity 0.25s ease-in-out;
 
-	&:hover {
+	&[href]:hover {
 		opacity: 0.8;
 	}
 
-	&:active {
+	&[href]:active {
 		opacity: 0.6;
 	}
 

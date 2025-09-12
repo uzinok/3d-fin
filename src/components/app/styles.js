@@ -19,6 +19,13 @@ body {
 	color: #ffffff;
 	background-color: #1f1f1f;
 	text-size-adjust: 100%;
+	display: grid;
+	grid-template-rows: 1fr;
+
+	& > div {
+		display: grid;
+		grid-template-rows: 1fr auto;
+	}
 }
 
 video,

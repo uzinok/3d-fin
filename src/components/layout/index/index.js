@@ -1,8 +1,10 @@
-import Header from "../../layout/header/header";
+import Header from "../header/header";
 import LinkIcon, { icons } from "../../ui/link-icon/link-icon";
+import Main from "../main/main";
+import Footer from "../footer/footer";
 
 
-function Index() {
+function Index({ children }) {
 	return (
 		<>
 			<Header>
@@ -12,6 +14,7 @@ function Index() {
 					target="_blank"
 					rel="noopener noreferrer"
 					$icon={icons.TELEGRAM}
+					as="span"
 				>
 					Telegram
 				</LinkIcon>
@@ -25,7 +28,10 @@ function Index() {
 					Youtube
 				</LinkIcon>
 			</Header>
-			<p>test</p>
+			<Main>
+				{children}
+			</Main>
+			<Footer>footer</Footer>
 		</>
 	)
 }
