@@ -12,15 +12,12 @@ function Gallery() {
 	useEffect(() => {
 		const fetchGalleryData = () => {
 			setLoading(true);
-			window.setTimeout(() => {
-				if (response && response['data']) {
-					setData(response['data']);
-				} else {
-					setError('Ошибка загрузки данных');
-				}
-				setLoading(false);
-			}, 1000);
-
+			if (response && response['data']) {
+				setData(response['data']);
+			} else {
+				setError('Ошибка загрузки данных');
+			}
+			setLoading(false);
 		};
 		fetchGalleryData();
 	}, []);
@@ -51,10 +48,12 @@ function Gallery() {
 		<section>
 			<Container>
 				<Title as='h2'>Мои работы</Title>
-				{Object.keys(data).length > 0 ? (
-					<MySwiper gallery={data['model']} />
-				) : (
-						null
+				{Object.keys(data).length > 0 && (
+					<>
+						<MySwiper gallery={data['other']} />
+						<MySwiper gallery={data['useful']} />
+						<MySwiper gallery={data['model']} />
+					</>
 				)}
 			</Container>
 		</section>

@@ -21,6 +21,17 @@ export const StyledSwiperSlide = styled(SwiperSlide)`
 	}
 `
 
+export const StyledSwiperContainer = styled.div`
+	position: relative;
+	padding: 0 10px;
+	margin-bottom: 40px;
+`
+
+export const StyledSwiperContent = styled.div`
+	overflow: hidden;
+		backdrop-filter: blur(20px);
+`
+
 export const StyledNavigationButton = styled.button`
 	position: absolute;
 	top: 50%;
