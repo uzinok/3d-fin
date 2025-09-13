@@ -59,5 +59,3 @@ export const StyledHeroTitle = styled(Title).attrs(props => ({className: props.c
 	letter-spacing: 2px;
 	text-wrap-style: balance;
 `
-
-export const StyledButton = styled(Button)``

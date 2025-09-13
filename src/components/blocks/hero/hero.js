@@ -1,12 +1,16 @@
 import { StyledHero, StyledHeroContainer, StyledHeroTitle } from "./styles";
+import Button from "../../ui/button/button";
 
 function Hero() {
 	return (
 		<StyledHero>
 			<StyledHeroContainer>
-				<StyledHeroTitle>
-					Эксклюзивные 3D-модели и&nbsp;печать на&nbsp;3D-принтере
-				</StyledHeroTitle>
+				<div>
+					<StyledHeroTitle>
+						Эксклюзивные 3D-модели и&nbsp;печать на&nbsp;3D-принтере
+					</StyledHeroTitle>
+					<Button as="button" type="button">Заказать печать</Button>
+				</div>
 			</StyledHeroContainer>
 		</StyledHero>
 	)
