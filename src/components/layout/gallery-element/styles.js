@@ -27,11 +27,6 @@ export const StyledSwiperContainer = styled.div`
 	margin-bottom: 20px;
 `
 
-export const StyledSwiperContent = styled.div`
-	overflow: hidden;
-		backdrop-filter: blur(20px);
-`
-
 export const StyledNavigationButton = styled.button`
 	position: absolute;
 	top: 50%;

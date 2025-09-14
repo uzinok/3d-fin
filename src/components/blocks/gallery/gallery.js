@@ -1,6 +1,7 @@
 import Container from "../../layout/container/container";
 import Title from "../../ui/title/title";
-import { MySwiper } from "../../ui/swiper-gallery/swiper-gallery";
+import GalleryElement from "../../layout/gallery-element/gallery-element";
+import { StyledContainer, StyledDecor } from "./styles";
 import { response } from "../../../mocks/response";
 import { useState, useEffect } from "react";
 
@@ -46,16 +47,17 @@ function Gallery() {
 
 	return (
 		<section>
-			<Container>
+			<StyledContainer>
+				<StyledDecor $animate="true" $circle="true" />
 				<Title as='h2'>Мои работы</Title>
 				{Object.keys(data).length > 0 && (
 					<>
-						<MySwiper gallery={data['other']} />
-						<MySwiper gallery={data['useful']} />
-						<MySwiper gallery={data['model']} />
+						<GalleryElement gallery={data['other']} />
+						<GalleryElement gallery={data['useful']} />
+						<GalleryElement gallery={data['model']} />
 					</>
 				)}
-			</Container>
+			</StyledContainer>
 		</section>
 	)
 }

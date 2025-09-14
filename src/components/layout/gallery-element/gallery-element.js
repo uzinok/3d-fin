@@ -1,12 +1,13 @@
 import { useState, useRef } from 'react';
 import { Swiper } from 'swiper/react';
 import { A11y } from 'swiper/modules';
-
-import { StyledSwiperSlide, StyledSwiperContainer, StyledSwiperContent, StyledNavigationButton } from './styles';
+import { StyledSwiperSlide, StyledSwiperContainer, StyledNavigationButton } from './styles';
+import Video from '../../ui/video/video';
 
 import 'swiper/css';
+import VisuallyHidden from '../../ui/visually-hidden/visually-hidden';
 
-export const MySwiper = ({ gallery }) => {
+function GalleryElement ({ gallery }) {
 
 	const [showButtons, setShowButtons] = useState(false);
 	const [disabledNextButton, setDisabledNextButton] = useState(false);
@@ -25,19 +26,12 @@ export const MySwiper = ({ gallery }) => {
 		}
 	};
 
-	const handleVideoClick = (e) => {
-		const video = e.target;
-
-		if (video.paused || video.ended) {
-			return video.play();
-		}
-		return video.pause();
-	}
-
 	return (
 		gallery.length > 0 ? (
 			<StyledSwiperContainer>{showButtons && (
-				<StyledNavigationButton direction="prev" onClick={handleprev} disabled={disabledPrevButton} />
+				<StyledNavigationButton direction="prev" onClick={handleprev} disabled={disabledPrevButton}>
+					<VisuallyHidden>Назад</VisuallyHidden>
+				</StyledNavigationButton>
 			)}
 				<Swiper
 					ref={swiperRef}
@@ -65,30 +59,27 @@ export const MySwiper = ({ gallery }) => {
 					{gallery.map((slide, index) => (
 						<StyledSwiperSlide key={index}>
 							{slide.type === 'video' ? (
-								<StyledSwiperContent>
-									<video
-										src={slide.src}
-										title={slide.title}
-										poster={slide.poster}
-										preload="none"
-										muted
-										loop
-										onClick={handleVideoClick}
-									/>
-								</StyledSwiperContent>
+								<Video
+									src={slide.src}
+									title={slide.title}
+									poster={slide.poster}
+									preload="none"
+									muted
+									loop
+								/>
 							) : (
-								<StyledSwiperContent>
-									<img
-										src={slide.src}
-										alt={slide.title}
-									/>
-								</StyledSwiperContent>
+								<img
+									src={slide.src}
+									alt={slide.title}
+								/>
 							)}
 						</StyledSwiperSlide>
 					))}
 				</Swiper>
 				{showButtons && (
-						<StyledNavigationButton direction="next" onClick={handleNext} disabled={disabledNextButton} />
+					<StyledNavigationButton direction="next" onClick={handleNext} disabled={disabledNextButton}>
+						<VisuallyHidden>Вперед</VisuallyHidden>
+					</StyledNavigationButton>
 				)}
 			</StyledSwiperContainer>
 		) : (
@@ -96,3 +87,5 @@ export const MySwiper = ({ gallery }) => {
 		)
 	);
 };
+
+export default GalleryElement;
