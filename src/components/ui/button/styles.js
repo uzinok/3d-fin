@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const StyledButton = styled.a`
 	display: inline-block;
+	width: fit-content;
 	padding: 12px 24px;
 	font-weight: 600;
 	font-size: 16px;

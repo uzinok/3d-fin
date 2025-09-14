@@ -47,7 +47,7 @@ export const StyledNavigationButton = styled.button`
 	font-weight: 700;
 	font-family: inherit;
 	color: inherit;
-	transition: opacity 0.25s ease-in-out;
+	transition: opacity 0.25s ease-in-out, filter 0.25s ease-in-out;
 
 	&:not(:disabled):hover {
 		opacity: 0.7;
@@ -59,6 +59,7 @@ export const StyledNavigationButton = styled.button`
 
 	&:disabled {
 		filter: grayscale(100%);
+		opacity: 0.5;
 	}
 
 	${(props) => {

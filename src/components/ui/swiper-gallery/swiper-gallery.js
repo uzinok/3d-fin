@@ -36,7 +36,9 @@ export const MySwiper = ({ gallery }) => {
 
 	return (
 		gallery.length > 0 ? (
-			<StyledSwiperContainer>
+			<StyledSwiperContainer>{showButtons && (
+				<StyledNavigationButton direction="prev" onClick={handleprev} disabled={disabledPrevButton} />
+			)}
 				<Swiper
 					ref={swiperRef}
 					modules={[A11y]}
@@ -86,10 +88,7 @@ export const MySwiper = ({ gallery }) => {
 					))}
 				</Swiper>
 				{showButtons && (
-					<>
 						<StyledNavigationButton direction="next" onClick={handleNext} disabled={disabledNextButton} />
-						<StyledNavigationButton direction="prev" onClick={handleprev} disabled={disabledPrevButton} />
-					</>
 				)}
 			</StyledSwiperContainer>
 		) : (
