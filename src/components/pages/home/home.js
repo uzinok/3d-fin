@@ -1,20 +1,28 @@
 import Index from "../../layout/index";
 import Hero from "../../blocks/hero/hero";
 import Gallery from "../../blocks/gallery/gallery";
-// import Popup from "../../layout/popup/popup";
-// import FormOrder from "../../blocks/form-order/form-order";
+import Popup from "../../layout/popup/popup";
+import FormOrder from "../../blocks/form-order/form-order";
+import { useState } from "react";
 
 function Home() {
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	return (
 		<>
 			<Index>
-				<Hero>
-					Эксклюзивные 3D-модели и&nbsp;печать на&nbsp;3D-принтере
-				</Hero>
+				<Hero
+					onOpenDialog={() => {
+						setIsDialogOpen(true);
+						console.log('open dialog');
+					}}
+				/>
 				<Gallery />
-				{/* <Popup>
+				<Popup
+					onCloseDialog={() => setIsDialogOpen(false)}
+					isOpen={isDialogOpen}
+				>
 					<FormOrder />
-				</Popup> */}
+				</Popup>
 			</Index>
 		</>
 	);
