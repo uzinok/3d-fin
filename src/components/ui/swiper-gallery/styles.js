@@ -24,7 +24,7 @@ export const StyledSwiperSlide = styled(SwiperSlide)`
 export const StyledSwiperContainer = styled.div`
 	position: relative;
 	padding: 0 10px;
-	margin-bottom: 40px;
+	margin-bottom: 20px;
 `
 
 export const StyledSwiperContent = styled.div`
@@ -49,12 +49,16 @@ export const StyledNavigationButton = styled.button`
 	color: inherit;
 	transition: opacity 0.25s ease-in-out;
 
-	&:hover {
+	&:not(:disabled):hover {
 		opacity: 0.7;
 	}
 
-	&:active {
+	&:not(:disabled):active {
 		opacity: 0.5;
+	}
+
+	&:disabled {
+		filter: grayscale(100%);
 	}
 
 	${(props) => {

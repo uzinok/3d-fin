@@ -9,6 +9,8 @@ import 'swiper/css';
 export const MySwiper = ({ gallery }) => {
 
 	const [showButtons, setShowButtons] = useState(false);
+	const [disabledNextButton, setDisabledNextButton] = useState(false);
+	const [disabledPrevButton, setDisabledPrevButton] = useState(true);
 	const swiperRef = useRef(null);
 
 	const handleprev = () => {
@@ -23,13 +25,21 @@ export const MySwiper = ({ gallery }) => {
 		}
 	};
 
+	const handleVideoClick = (e) => {
+		const video = e.target;
+
+		if (video.paused || video.ended) {
+			return video.play();
+		}
+		return video.pause();
+	}
+
 	return (
 		gallery.length > 0 ? (
 			<StyledSwiperContainer>
 				<Swiper
 					ref={swiperRef}
 					modules={[A11y]}
-					loop={true}
 					spaceBetween={20}
 					slidesPerView={1}
 					navigation
@@ -45,6 +55,10 @@ export const MySwiper = ({ gallery }) => {
 						updateShowButtons();
 						swiper.on('resize', updateShowButtons);
 					}}
+					onSlideChange={(swiper) => {
+						setDisabledPrevButton(swiper.isBeginning);
+						setDisabledNextButton(swiper.isEnd);
+					}}
 				>
 					{gallery.map((slide, index) => (
 						<StyledSwiperSlide key={index}>
@@ -53,9 +67,11 @@ export const MySwiper = ({ gallery }) => {
 									<video
 										src={slide.src}
 										title={slide.title}
-										controls
 										poster={slide.poster}
-										preload="metadata"
+										preload="none"
+										muted
+										loop
+										onClick={handleVideoClick}
 									/>
 								</StyledSwiperContent>
 							) : (
@@ -71,8 +87,8 @@ export const MySwiper = ({ gallery }) => {
 				</Swiper>
 				{showButtons && (
 					<>
-						<StyledNavigationButton direction="next" onClick={handleNext}/>
-						<StyledNavigationButton direction="prev" onClick={handleprev}/>
+						<StyledNavigationButton direction="next" onClick={handleNext} disabled={disabledNextButton} />
+						<StyledNavigationButton direction="prev" onClick={handleprev} disabled={disabledPrevButton} />
 					</>
 				)}
 			</StyledSwiperContainer>
