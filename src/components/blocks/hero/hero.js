@@ -2,7 +2,6 @@ import { StyledHero, StyledHeroContainer, StyledHeroTitle } from "./styles";
 import Button from "../../ui/button/button";
 
 function Hero({ onOpenDialog }) {
-
 	return (
 		<StyledHero>
 			<StyledHeroContainer>
@@ -11,7 +10,6 @@ function Hero({ onOpenDialog }) {
 						Эксклюзивные 3D-модели и&nbsp;печать на&nbsp;3D-принтере
 					</StyledHeroTitle>
 					<Button
-						onClick={ onOpenDialog }
 						as="button"
 						type="button"
 					>
