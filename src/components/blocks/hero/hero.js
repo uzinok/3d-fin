@@ -1,7 +1,7 @@
 import { StyledHero, StyledHeroContainer, StyledHeroTitle } from "./styles";
 import Button from "../../ui/button/button";
 
-function Hero({ onOpenDialog }) {
+function Hero({ onOpen }) {
 	return (
 		<StyledHero>
 			<StyledHeroContainer>
@@ -12,6 +12,7 @@ function Hero({ onOpenDialog }) {
 					<Button
 						as="button"
 						type="button"
+						onClick={() => onOpen && onOpen()}
 					>
 						Заказать печать
 					</Button>

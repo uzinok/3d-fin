@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Container from "../container/container";
 import closeSvg from '../../../assets/icons/close.svg';
 
-export const StyledPopup = styled.div`
+export const StyledOverlay = styled.div`
 	position: fixed;
 	z-index: 2;
 	display: grid;
@@ -15,7 +15,7 @@ export const StyledPopup = styled.div`
 	background-image: linear-gradient(135deg, rgba(62, 31, 5, 0.3), rgba(106, 78, 38, 0.3), rgba(194, 156, 99, 0.3), rgba(212, 180, 131, 0.3));
 	`
 
-	export const StyledPopupContent = styled(Container)`
+	export const StyledPopup = styled(Container)`
 	position: relative;
 	width: 100%;
 	max-width: 600px;
