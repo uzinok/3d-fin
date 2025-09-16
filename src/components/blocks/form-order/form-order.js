@@ -18,10 +18,8 @@ function FormOrder() {
 				type="text"
 				placeholder="Телефон/Email *"
 				autoComplete="off"
-				className="invalid"
 			/>
 			<TextArea
-				className="valid"
 				as="textarea"
 				name="comments"
 				placeholder="Опишите желаемую модель *"
