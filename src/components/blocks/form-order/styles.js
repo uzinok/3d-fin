@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import Title from "../../ui/title/title";
-import Button from "../../ui/button/button";
 
 export const StyledForm = styled.form`
 	display: grid;

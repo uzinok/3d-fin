@@ -1,10 +1,11 @@
 import styled from "styled-components";
 
 export const InputField = styled.input`
+	--input-height: 44px;
 	box-sizing: border-box;
 	width: 100%;
 	max-width: 100%;
-	height: 44px;
+	height: var(--input-height);
 	padding: 12px 15px;
 	font-size: inherit;
 	line-height: 1;
@@ -13,9 +14,16 @@ export const InputField = styled.input`
 	background-color: #ffffff;
 	border-width: 0;
 	border-radius: 6px;
-	border: 1px solid ${(props) => props.invalid ? '#ff0000' : '#bbbbbb'};
-	border: 1px solid ${(props) => props.valid ? '#00ff00' : '#bbbbbb'};
+	border: 1px solid #bbbbbb;
 	resize: none;
+
+	&.invalid {
+		border: 1px solid #ff0000;
+	}
+
+	&.valid {
+		border: 1px solid #00ff00;
+	}
 
 	&:focus-visible,
 	&:focus {
