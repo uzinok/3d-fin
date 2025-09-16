@@ -4,7 +4,10 @@ function TextArea({
 	as,
 	name,
 	placeholder,
-	className
+	className,
+	ref,
+	onInput,
+	...props
 }) {
 	const handleChange = (e) => {
 		e.target.style.height = 'auto';
@@ -12,11 +15,14 @@ function TextArea({
 	}
 	return (
 		<StyledTextArea
+			ref={ref}
 			as={as}
 			name={name}
 			placeholder={placeholder}
 			className={className}
 			onChange={handleChange}
+			onInput={onInput}
+			{...props}
 		/>
 	)
 }
