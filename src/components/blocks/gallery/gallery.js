@@ -2,7 +2,6 @@ import Container from "../../layout/container/container";
 import Title from "../../ui/title/title";
 import GalleryElement from "../../layout/gallery-element/gallery-element";
 import { StyledContainer, StyledDecor } from "./styles";
-import { response } from "../../../mocks/response";
 import { useState, useEffect } from "react";
 
 function Gallery() {
@@ -11,15 +10,30 @@ function Gallery() {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		const fetchGalleryData = () => {
-			setLoading(true);
-			if (response && response['data']) {
-				setData(response['data']);
-			} else {
-				setError('Ошибка загрузки данных');
+		const fetchGalleryData = async () => {
+			try {
+				setLoading(true);
+				const response = await fetch('get-gallery.php');
+
+				if (!response.ok) {
+					throw new Error('Network response was not ok');
+				}
+
+				const result = await response.json();
+
+				if (result.success) {
+					setData(result.data);
+				} else {
+					throw new Error(result.message || 'Failed to fetch gallery data');
+				}
+			} catch (err) {
+				setError(err.message);
+				console.error('Error fetching gallery data:', err);
+			} finally {
+				setLoading(false);
 			}
-			setLoading(false);
 		};
+
 		fetchGalleryData();
 	}, []);
 
