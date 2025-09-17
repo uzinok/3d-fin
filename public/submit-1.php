@@ -1,4 +1,7 @@
 <?php
+// Устанавливаем заголовок для JSON ответа
+header('Content-Type: application/json; charset=utf-8');
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Получаем данные из POST-запроса
     $typeContact = filter_var($_POST['typeContact'], FILTER_SANITIZE_STRING);
@@ -9,7 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Проверяем, что все обязательные поля заполнены
     if (empty($typeContact) || empty($name) || empty($contact) || empty($comments)) {
         http_response_code(400);
-        echo "Все поля обязательны для заполнения";
+        echo json_encode([
+            'success' => false,
+            'message' => 'Все поля обязательны для заполнения'
+        ]);
         exit;
     }
 
@@ -42,8 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h2>Сообщение с сайта colorlesscat.uzinok.ru</h2>
     <p><strong>Дата:</strong> " . date('d.m.Y H:i:s') . "</p>
     <p><strong>Имя:</strong> $name</p>
-    <p><strong>Тип контакта:</strong> $typeContact</p>
-    <p><strong>Контакты:</strong> $contactLink</p>
+    <p><strong>$typeContact:</strong> $contactLink</p>
     <p><strong>Комментарии:</strong><br>$comments</p>
 </body>
 </html>
@@ -59,13 +64,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Пытаемся отправить email
     if (mail($to, $subject, $message, $headers)) {
         http_response_code(200);
-        echo "Сообщение успешно отправлено!";
+        echo json_encode([
+            'success' => true,
+            'message' => 'Сообщение успешно отправлено!'
+        ]);
     } else {
         http_response_code(500);
-        echo "Ошибка при отправке сообщения: " . error_get_last()['message'];
+        $error = error_get_last();
+        echo json_encode([
+            'success' => false,
+            'message' => 'Ошибка при отправке сообщения',
+            'error' => $error ? $error['message'] : 'Неизвестная ошибка'
+        ]);
     }
 } else {
     http_response_code(405);
-    echo "Метод не разрешен";
+    echo json_encode([
+        'success' => false,
+        'message' => 'Метод не разрешен'
+    ]);
 }
 ?>

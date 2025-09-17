@@ -14,7 +14,7 @@ export const InputField = styled.input`
 	background-color: #ffffff;
 	border-width: 0;
 	border-radius: 6px;
-	border: 1px solid #bbbbbb;
+	border: 1px solid transparent;
 	resize: none;
 
 	&.invalid {

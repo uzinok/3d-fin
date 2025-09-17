@@ -1,7 +1,6 @@
 import { StyledTextArea } from "./styles";
 
 function TextArea({
-	as,
 	name,
 	placeholder,
 	className,
@@ -16,7 +15,7 @@ function TextArea({
 	return (
 		<StyledTextArea
 			ref={ref}
-			as={as}
+			as="textarea"
 			name={name}
 			placeholder={placeholder}
 			className={className}

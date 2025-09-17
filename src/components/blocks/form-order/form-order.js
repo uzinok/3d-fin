@@ -2,7 +2,7 @@ import { StyledForm, StyledTitle } from "./styles";
 import { InputField } from "../../ui/form-elements/input-field/input-field";
 import TextArea from "../../ui/form-elements/textarea/textarea";
 import Button from "../../ui/button/button";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import getTopLeftCoordinates from "../../function/getTopLeftCoordinates";
 import ErrorMessage from "../../ui/error-message/error-message";
 import SubmitMessage, { colorMessage } from "../../ui/submit-message/submit-message";
@@ -72,7 +72,6 @@ function FormOrder() {
 			setTextErrorMessage('Должно быть не менее 3 символов');
 			return;
 		}
-		console.log(validContact(contactRef.current.value));
 
 		if (validContact(contactRef.current.value) === "") {
 			setCoordinates(getTopLeftCoordinates(contactRef.current));
@@ -90,36 +89,49 @@ function FormOrder() {
 
 		const formData = new FormData(formRef.current);
 		setIsLoading(true);
+		setTextFormButton(TEXTFORBUTTON.loading);
 
-		fetch('https://colorlesscat.uzinok.ru/submit-1.php', {
+		fetch('submit-1.php', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
 			},
 			body: new URLSearchParams(formData)
 		})
-			.then((response) => {
-				setTextFormButton(TEXTFORBUTTON.loading)
-				if (response.status >= 200 && response.status < 300 && response.ok) {
-					setMessageText(response.text());
-					formRef.current.reset();
+			.then(async (response) => {
+				const data = await response.json();
+
+				if (response.ok && data.success) {
+					setMessageText(data.message);
+					setMessageColor(colorMessage.SUCCESS);
 					setTextFormButton(TEXTFORBUTTON.success);
-					setIsLoading(false);
 					formRef.current.reset();
+					localStorage.removeItem('formOrderData');
+					setTypeContact('');
 				} else {
-					setMessageText(response.text());
+					setMessageText(data.message + (data.error ? `: ${data.error}` : ''));
 					setMessageColor(colorMessage.ERROR);
 					setTextFormButton(TEXTFORBUTTON.error);
-					setIsLoading(false);
 				}
 			})
-			.catch(() => {
-				setMessageText('Ошибка при отправке формы. \n Попробуйте повторить позже.');
+			.catch((error) => {
+				// Ошибка сети или парсинга JSON
+				let errorMessage = 'Ошибка при отправке формы. Попробуйте повторить позже.';
+
+				if (error instanceof SyntaxError) {
+					errorMessage = 'Ошибка обработки ответа сервера';
+				} else {
+					errorMessage = error.message || errorMessage;
+				}
+
+				setMessageText(errorMessage);
 				setMessageColor(colorMessage.ERROR);
 				setTextFormButton(TEXTFORBUTTON.error);
+			})
+			.finally(() => {
 				setIsLoading(false);
 			});
-	}
+	};
 
 	const clearMessage = () => {
 		setTextErrorMessage('');
@@ -141,12 +153,36 @@ function FormOrder() {
 			setValidInput(commentsRef.current);
 	}
 
+	useEffect(() => {
+		const savedData = localStorage.getItem('formOrderData');
+		if (savedData) {
+			const formData = JSON.parse(savedData);
+			if (nameRef.current) nameRef.current.value = formData.name || '';
+			if (contactRef.current) contactRef.current.value = formData.contact || '';
+			if (commentsRef.current) commentsRef.current.value = formData.comments || '';
+			setTypeContact(formData.typeContact || '');
+		}
+	}, []);
+
+	const handleFormChange = (e) => {
+		const formData = new FormData(formRef.current);
+		const data = {
+			name: formData.get('name') || '',
+			contact: formData.get('contact') || '',
+			comments: formData.get('comments') || '',
+			typeContact: typeContact || ''
+		};
+
+		localStorage.setItem('formOrderData', JSON.stringify(data));
+	};
+
 	return (
 		<StyledForm
 			ref={formRef}
 			autoComplete="off"
 			onSubmit={handleSubmit}
 			onClick={clearMessage}
+			onChange={handleFormChange}
 			>
 			<StyledTitle as="h2">Заказать звонок</StyledTitle>
 			<input
@@ -173,7 +209,6 @@ function FormOrder() {
 			/>
 			<TextArea
 				ref={commentsRef}
-				as="textarea"
 				name="comments"
 				placeholder="Опишите желаемую модель *"
 				onInput={handleInputComments}
