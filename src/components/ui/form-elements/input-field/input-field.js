@@ -1,6 +1,9 @@
 import styled from "styled-components";
 
-export const InputField = styled.input`
+export const InputField = styled.input.attrs(props => ({
+	className: props.className,
+	...props
+}))`
 	--input-height: 44px;
 	box-sizing: border-box;
 	width: 100%;

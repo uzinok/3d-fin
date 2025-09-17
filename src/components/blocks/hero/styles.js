@@ -3,7 +3,6 @@ import heroBg from "../../../assets/index/hero-bg.webp";
 import Container from "../../layout/container/container";
 import heroImg from "../../../assets/index/hero-img.webp";
 import Title from "../../ui/title/title";
-import Button from "../../ui/button/button";
 
 export const StyledHero = styled.section`
 	position: relative;
@@ -58,4 +57,14 @@ export const StyledHeroContainer = styled(Container)`
 export const StyledHeroTitle = styled(Title).attrs(props => ({className: props.className}))`
 	letter-spacing: 2px;
 	text-wrap-style: balance;
+
+	&:has(+ p) {
+		margin-bottom: 0.25em;
+	}
+`
+
+export const StyledHeroSubTitle = styled.p`
+	font-size: 18px;
+	margin-top: 0;
+	margin-bottom: 2em;
 `
