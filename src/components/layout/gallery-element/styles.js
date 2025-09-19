@@ -24,8 +24,13 @@ export const StyledSwiperSlide = styled(SwiperSlide)`
 export const StyledSwiperContainer = styled.div`
 	position: relative;
 	margin-bottom: 20px;
+
 	@media (max-width: 1040px) {
 		padding: 0 10px;
+	}
+
+	& > div {
+		padding: 1px;
 	}
 `
 

@@ -25,8 +25,3 @@ export const StyledDecor = styled(Decor)`
 		height: 200px;
 	}
 `
-
-export const StyledDescription = styled.p`
-	margin: 0 0 1em;
-	font-size: 18px;
-`

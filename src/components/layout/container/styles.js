@@ -5,7 +5,11 @@ const StyledContainer = styled.div`
 	width: 100%;
 	max-width: 1000px;
 	margin: 0 auto;
-	padding: 70px 20px;
+	padding: 50px 20px;
+
+	@media (min-width: 768px) {
+		padding: 100px 20px;
+	}
 
 	& > *:first-child {
 		margin-top: 0;

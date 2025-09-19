@@ -17,7 +17,8 @@ export const StyledHero = styled.section`
 
 export const StyledHeroContainer = styled(Container)`
 	position: relative;
-	padding-bottom: 40px;
+	padding-bottom: 50px!important;
+	padding-top: 50px!important;
 
 	@media (max-width: 445px) {
 		&::before {
@@ -57,14 +58,4 @@ export const StyledHeroContainer = styled(Container)`
 export const StyledHeroTitle = styled(Title).attrs(props => ({className: props.className}))`
 	letter-spacing: 2px;
 	text-wrap-style: balance;
-
-	&:has(+ p) {
-		margin-bottom: 0.25em;
-	}
-`
-
-export const StyledHeroSubTitle = styled.p`
-	font-size: 20px;
-	margin-top: 0;
-	margin-bottom: 2em;
 `

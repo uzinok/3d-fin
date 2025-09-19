@@ -1,6 +1,7 @@
 import Title from "../../ui/title/title";
-import { StyledContainer, StyledDecor, StyledDescription } from "./styles";
+import { StyledContainer, StyledDecor } from "./styles";
 import GalleryElement from "../../layout/gallery-element/gallery-element";
+import SubTitle from "../../ui/subtitle/subtitle";
 
 function Gallery({ title, loading, error, gallery, description }) {
 	return (
@@ -11,7 +12,7 @@ function Gallery({ title, loading, error, gallery, description }) {
 					<Title as='h2'>{title}</Title>
 					)}
 					{description && (
-						<StyledDescription>{description}</StyledDescription>
+						<SubTitle>{description}</SubTitle>
 					)}
 					{loading && (
 						<p>Загрузка...</p>

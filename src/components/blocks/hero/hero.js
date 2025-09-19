@@ -1,4 +1,5 @@
-import { StyledHero, StyledHeroContainer, StyledHeroTitle, StyledHeroSubTitle } from "./styles";
+import { StyledHero, StyledHeroContainer, StyledHeroTitle } from "./styles";
+import SubTitle from "../../ui/subtitle/subtitle";
 import Button from "../../ui/button/button";
 
 function Hero({ onOpen }) {
@@ -9,9 +10,9 @@ function Hero({ onOpen }) {
 					<StyledHeroTitle>
 						Эксклюзивные 3D-модели и&nbsp;печать на&nbsp;3D-принтере
 					</StyledHeroTitle>
-					<StyledHeroSubTitle>
+					<SubTitle>
 						Ваше воображение&nbsp;&mdash; наша печать!
-					</StyledHeroSubTitle>
+					</SubTitle>
 					<Button
 						as="button"
 						type="button"
