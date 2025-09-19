@@ -1,7 +1,7 @@
 import Container from "../container/container";
 import styled from "styled-components";
 
-export const StyledFooter = styled(Container).attrs(props => ({as: "footer"}))`
+export const StyledContainer = styled(Container)`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;

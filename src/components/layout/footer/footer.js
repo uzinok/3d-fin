@@ -1,13 +1,12 @@
-import { StyledFooter } from "./styles";
-import Container from "../container/container";
+import { StyledContainer } from "./styles";
 
 function Footer() {
 	return (
-		<StyledFooter>
-			<Container>
+		<footer>
+			<StyledContainer>
 				<span>© 2025</span>
-			</Container>
-		</StyledFooter>
+			</StyledContainer>
+		</footer>
 	)
 }
 

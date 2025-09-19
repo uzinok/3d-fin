@@ -64,7 +64,7 @@ export const StyledHeroTitle = styled(Title).attrs(props => ({className: props.c
 `
 
 export const StyledHeroSubTitle = styled.p`
-	font-size: 18px;
+	font-size: 20px;
 	margin-top: 0;
 	margin-bottom: 2em;
 `

@@ -17,4 +17,16 @@ export const StyledDecor = styled(Decor)`
 	@media (max-width: 768px) {
 		display: none;
 	}
+
+	section:nth-child(4n+4) & {
+		top: -100px;
+		left: -100px;
+		width: 200px;
+		height: 200px;
+	}
+`
+
+export const StyledDescription = styled.p`
+	margin: 0 0 1em;
+	font-size: 18px;
 `

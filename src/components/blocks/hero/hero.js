@@ -10,7 +10,7 @@ function Hero({ onOpen }) {
 						Эксклюзивные 3D-модели и&nbsp;печать на&nbsp;3D-принтере
 					</StyledHeroTitle>
 					<StyledHeroSubTitle>
-						Делаем 3D-модели и&nbsp;печать на&nbsp;3D-принтере
+						Ваше воображение&nbsp;&mdash; наша печать!
 					</StyledHeroSubTitle>
 					<Button
 						as="button"
