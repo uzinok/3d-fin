@@ -22,6 +22,7 @@ const Decor = styled.div`
 		right: 0;
 		background-image: linear-gradient(135deg, #3e1f05, #6a4e26, #c29c63, #d4b383);
 		${(props) => (props.$animate && "animation: rotate var(--transition-duration) linear infinite reverse;") }
+		pointer-events: none;
 	}
 `
 

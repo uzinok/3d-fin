@@ -1,4 +1,4 @@
-import { StyledList, StyledIcon, StyledCardLink } from "./styles";
+import { StyledList, StyledCard, StyledIcon } from "./styles";
 
 function CardList({ list }) {
 	return (
@@ -7,22 +7,12 @@ function CardList({ list }) {
 				{list.map((item, index) => (
 					<li key={index}>
 						{item.href ? (
-							<StyledCardLink href={item.href}>
-								{item.icon && (
-									<StyledIcon>{item.icon}</StyledIcon>
-								)}
-								{item.title && (
-									<h3>{item.title}</h3>
-								)}
-								{item.description && (
-									<p>{item.description}</p>
-								)}
-								{item.href && (
-									<span>{item.linkText || "Read more"}</span>
-								)}
-							</StyledCardLink>
-						) : (
-								<>
+							<a
+								href={item.href}
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<StyledCard>
 									{item.icon && (
 										<StyledIcon>{item.icon}</StyledIcon>
 									)}
@@ -35,7 +25,23 @@ function CardList({ list }) {
 									{item.href && (
 										<span>{item.linkText || "Read more"}</span>
 									)}
-								</>
+								</StyledCard>
+							</a>
+						) : (
+							<StyledCard>
+								{item.icon && (
+									<StyledIcon>{item.icon}</StyledIcon>
+								)}
+								{item.title && (
+									<h3>{item.title}</h3>
+								)}
+								{item.description && (
+									<p>{item.description}</p>
+								)}
+								{item.href && (
+									<span>{item.linkText || "Read more"}</span>
+								)}
+							</StyledCard>
 						)}
 
 					</li>

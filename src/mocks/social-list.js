@@ -6,7 +6,7 @@ export const socialList = {
 			icon: ``,
 			title: "Наш Telegram-канал",
 			description: "Сотни готовых моделей в нашей галерее. Идеи для вдохновения и готовые решения.",
-			href: "https://t.me/your_channel",
+			href: "https://t.me/kanalzanjat",
 			linkText: "Подписаться →"
 		},
 		{
@@ -14,7 +14,7 @@ export const socialList = {
 			icon: ``,
 			title: "Наш YouTube-канал",
 			description: "Закулисье создания моделей, обзоры готовых работ и лайфхаки по 3D-печати.",
-			href: "https://youtube.com/your_channel",
+			href: "https://youtube.com/@unnecessary-set-of-letters",
 			linkText: "Смотреть →"
 		}
 	]

@@ -13,15 +13,4 @@ export const StyledDecor = styled(Decor)`
 	width: 300px;
 	height: 300px;
 	z-index: 2;
-
-	@media (max-width: 768px) {
-		display: none;
-	}
-
-	section:nth-child(4n+4) & {
-		top: -100px;
-		left: -100px;
-		width: 200px;
-		height: 200px;
-	}
 `

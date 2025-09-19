@@ -20,7 +20,7 @@ function Index({ children }) {
 				</LinkIcon>
 				<LinkIcon
 					title="Youtube канал"
-					href='https://youtube.com/@unnecessary-set-of-letters'
+					href="https://youtube.com/@unnecessary-set-of-letters"
 					target="_blank"
 					rel="noopener noreferrer"
 					$icon={icons.YOUTUBE}

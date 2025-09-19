@@ -25,10 +25,6 @@ export const StyledSwiperContainer = styled.div`
 	position: relative;
 	margin-bottom: 20px;
 
-	@media (max-width: 1040px) {
-		padding: 0 10px;
-	}
-
 	& > div {
 		padding: 1px;
 	}
@@ -78,7 +74,7 @@ export const StyledNavigationButton = styled.button`
 			mask-size: 50% auto;
 			background-image: linear-gradient(135deg, #3e1f05, #6a4e26, #c29c63, #d4b383);
 		}
-		${direction}: -28px;
+		${direction}: -33px;
 		@media (min-width: 1040px) {
 			${direction}: -48px;
 		}
