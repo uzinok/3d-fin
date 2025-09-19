@@ -7,8 +7,8 @@ function Socials() {
 	return (
 		<section>
 			<StyledContainer>
-				<Title as='h2'>Больше нашего творчества в соцсетях</Title>
-				<p>Подписывайтесь, чтобы быть в курсе новых работ и идей!</p>
+				<Title as='h2'>Хотите больше вдохновения?</Title>
+				<p>Подписывайтесь на наши соцсети, чтобы первыми видеть новые работы, следить за процессом создания и перенимать лайфхаки из мира 3D-печати.</p>
 				<CardList list={socialList.items} />
 			</StyledContainer>
 		</section>
