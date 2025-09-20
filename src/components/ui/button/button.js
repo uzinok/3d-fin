@@ -4,7 +4,6 @@ function Button({
 	children,
 	className,
 	type,
-	as,
 	onClick,
 	disabled
 }) {
@@ -12,7 +11,7 @@ function Button({
 		<StyledButton
 			className={className}
 			type={type}
-			as={as}
+			as={type ? "button" : "a"}
 			onClick={onClick}
 			disabled={disabled}
 		>

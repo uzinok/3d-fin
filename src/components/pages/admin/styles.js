@@ -7,7 +7,8 @@ export const StyledContainer = styled(Container)`
 `
 
 export const StyledContent = styled.div`
-	background: #ffffff;
+	background-color: #ffffff;
+	color: #000000;
 `
 
 export const StyledLink = styled(Link)`

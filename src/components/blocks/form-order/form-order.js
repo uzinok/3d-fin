@@ -213,7 +213,7 @@ function FormOrder() {
 				placeholder="Опишите желаемую модель *"
 				onInput={handleInputComments}
 			/>
-			<Button as="button" type="submit" disabled={isLoading}>{ TextForButton }</Button>
+			<Button type="submit" disabled={isLoading}>{ TextForButton }</Button>
 			{textErrorMessage && (
 				<ErrorMessage $coordinates={coordinates}>{textErrorMessage}</ErrorMessage>
 			)}
