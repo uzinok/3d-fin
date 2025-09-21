@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { StyledContainer } from "./styles";
 
 function Footer() {
@@ -6,6 +7,7 @@ function Footer() {
 		<footer>
 			<StyledContainer>
 				<span>© {new Date().getFullYear()}</span>
+				<Link to="/admin">Админка</Link>
 			</StyledContainer>
 		</footer>
 	)

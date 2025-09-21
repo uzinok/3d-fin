@@ -1,6 +1,6 @@
-import { InputField } from "../../../ui/form-elements/input-field/input-field";
+import { InputField } from "../../ui/form-elements/input-field/input-field";
 import { StyledForm, StyledInputFileWrap } from "./styles";
-import Button from "../../../ui/button/button";
+import Button from "../../ui/button/button";
 import { useState } from "react";
 
 function UploadFile() {

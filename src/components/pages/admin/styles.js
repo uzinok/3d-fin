@@ -2,6 +2,10 @@ import styled from "styled-components";
 import Container from "../../layout/container/container";
 import { Link } from "react-router-dom";
 
+export const StyledMain = styled.main`
+	overflow: hidden;
+`
+
 export const StyledContainer = styled(Container)`
 	padding-top: 65px;
 `

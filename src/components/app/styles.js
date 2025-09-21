@@ -9,6 +9,7 @@ body {
 
 html {
 	scrollbar-gutter: stable;
+	scroll-behavior: smooth;
 }
 
 body {

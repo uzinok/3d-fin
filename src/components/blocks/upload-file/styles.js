@@ -8,6 +8,7 @@ export const StyledForm = styled.form `
 	background-color: #d4b383;
 	padding: 20px;
 	border-radius: 6px;
+	margin-bottom: 1em;
 
 	& > div {
 		display: flex;
