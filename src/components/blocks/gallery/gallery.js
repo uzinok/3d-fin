@@ -3,6 +3,7 @@ import { StyledContainer, StyledDecor } from "./styles";
 import GalleryElement from "../../layout/gallery-element/gallery-element";
 import SubTitle from "../../ui/subtitle/subtitle";
 import { useState, useEffect } from "react";
+import Hgroup from "../../layout/hgroup/hgroup";
 
 function Gallery({ title, loading, error, gallery, description }) {
 	const [isShowDecor, setIsShowDecor] = useState(false);
@@ -25,12 +26,14 @@ function Gallery({ title, loading, error, gallery, description }) {
 				{isShowDecor && (
 					<StyledDecor $animate="true" $circle="true" />
 				)}
-				{title && (
-				<Title as='h2'>{title}</Title>
-				)}
-				{description && (
-					<SubTitle>{description}</SubTitle>
-				)}
+				<Hgroup>
+					{title && (
+					<Title as='h2'>{title}</Title>
+					)}
+					{description && (
+						<SubTitle>{description}</SubTitle>
+					)}
+				</Hgroup>
 				{loading && (
 					<p>Загрузка...</p>
 				)}

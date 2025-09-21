@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const StyledTitle = styled.h1`
-	margin: 0 0 1.5em;
+	margin: 0;
 	font-size: 1.5em;
 	font-weight: 600;
 	font-family: "Roboto Condensed", Arial, Helvetica, sans-serif;
@@ -16,9 +16,5 @@ export const StyledTitle = styled.h1`
 
 	@media (min-width: 1000px) {
 		font-size: 2.7em;
-	}
-
-	&:has(+ p) {
-		margin-bottom: 0.15em;
 	}
 `
