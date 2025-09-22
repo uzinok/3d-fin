@@ -3,7 +3,7 @@ import Hero from "../../blocks/hero/hero";
 import Popup from "../../layout/popup/popup";
 import FormOrder from "../../blocks/form-order/form-order";
 import { useState, useEffect } from "react";
-import fetchGalleryData from "../../function/fetchGalleryData";
+import fetchData from "../../function/fetch-data";
 import Gallery from "../../blocks/gallery/gallery";
 import BlockList from "../../blocks/block-list/block-list";
 import { advantages } from "../../../mocks/advantages";
@@ -18,7 +18,7 @@ function Home() {
 	useEffect(() => {
 		const loadGallery = async () => {
 			try {
-				const result = await fetchGalleryData();
+				const result = await fetchData();
 
 				if (result.error) {
 					setError(result.error);

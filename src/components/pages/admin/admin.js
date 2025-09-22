@@ -1,6 +1,6 @@
 import Header from "../../layout/header/header";
 import { StyledLink } from "./styles";
-import fetchGalleryData from "../../function/fetchGalleryData";
+import fetchGalleryData from "../../function/fetch-data";
 import { useEffect, useState } from "react";
 import { StyledHero, StyledHeroContainer } from "../../blocks/hero/styles";
 import EditHgroup from "../../blocks/edit-hgroup/edit-hgroup";
