@@ -1,4 +1,5 @@
 export const advantages = {
+	title: "Преимущества",
 	items: [
 		{
 			id: 1,
