@@ -25,8 +25,8 @@ export const StyledForm = styled.form `
 export const StyledInputFileWrap = styled.label `
 	background-color: #ffffff;
 	display: block;
-	width: 270px;
-	height: 270px;
+	width: 150px;
+	height: 150px;
 	position: relative;
 	padding: 5px;
 	border: 5px solid #ffffff;
