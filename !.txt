@@ -1,0 +1,58 @@
+Структура таблиц
+
+-- Таблица для темных блоков (преимущества, социальные сети)
+CREATE TABLE dark_blocks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    block_type ENUM('social', 'advantages') NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    subtitle TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Таблица для элементов темных блоков
+CREATE TABLE dark_block_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    dark_block_id INT NOT NULL,
+    item_order INT NOT NULL DEFAULT 0,
+    icon VARCHAR(255),
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    href VARCHAR(500),
+    link_text VARCHAR(100),
+    FOREIGN KEY (dark_block_id) REFERENCES dark_blocks(id) ON DELETE CASCADE,
+    INDEX (dark_block_id, item_order)
+);
+
+-- Таблица для галерей
+CREATE TABLE galleries (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    gallery_type VARCHAR(50) NOT NULL, -- 'model', 'souvenirs', etc.
+    title VARCHAR(255) NOT NULL,
+    subtitle TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Таблица для элементов галереи
+CREATE TABLE gallery_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    gallery_id INT NOT NULL,
+    item_order INT NOT NULL DEFAULT 0,
+    title VARCHAR(255) NOT NULL,
+    type ENUM('image', 'video') NOT NULL,
+    src VARCHAR(500) NOT NULL,
+    poster VARCHAR(500),
+    FOREIGN KEY (gallery_id) REFERENCES galleries(id) ON DELETE CASCADE,
+    INDEX (gallery_id, item_order)
+);
+
+config.php
+
+<?php
+// config.php
+define('DB_HOST', 'localhost');
+define('DB_NAME', '3d_printing_db');
+define('DB_USER', 'your_username');
+define('DB_PASS', 'your_password');
+?>
