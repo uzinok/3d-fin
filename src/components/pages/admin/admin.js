@@ -2,7 +2,6 @@ import Header from "../../layout/header/header";
 import { StyledLink } from "./styles";
 import Container from "../../layout/container/container";
 import fetchGalleryData from "../../function/fetchGalleryData";
-import GalleryDeleteMedia from "../../blocks/gallery-delete-media/gallery-delete-media";
 import { useEffect, useState } from "react";
 import { StyledHero, StyledHeroContainer } from "../../blocks/hero/styles";
 import EditHgroup from "../../blocks/edit-hgroup/edit-hgroup";

@@ -5,8 +5,9 @@ import FormOrder from "../../blocks/form-order/form-order";
 import { useState, useEffect } from "react";
 import fetchGalleryData from "../../function/fetchGalleryData";
 import Gallery from "../../blocks/gallery/gallery";
-import Advantages from "../../blocks/advantages/advantages";
-import Socials from "../../blocks/socials/socials";
+import BlockList from "../../blocks/block-list/block-list";
+import { advantages } from "../../../mocks/advantages";
+import { socialList } from "../../../mocks/social-list";
 
 function Home() {
 	const [isShowPopup, setIsShowPopup] = useState(false);
@@ -45,7 +46,10 @@ function Home() {
 					gallery={gallery['other']}
 					description="Персонализированные подарки запоминаются надолго. Мы&nbsp;создаем уникальные вещи, которые идеально отражают характер, увлечения или бренд. Отличный способ выделиться и&nbsp;порадовать близких, коллег или клиентов."
 				/>
-				<Advantages />
+				<BlockList
+					heading="Преимущества"
+					list={advantages}
+				/>
 				<Gallery
 					title="Полезные вещи для дома"
 					loading={loading}
@@ -53,7 +57,11 @@ function Home() {
 					gallery={gallery['useful']}
 					description="3D-печать&nbsp;&mdash; это не&nbsp;только игрушки, но&nbsp;и&nbsp;практичность. Мы&nbsp;поможем напечатать недостающую деталь для бытовой техники, уникальный органайзер, подставку или любой другой аксессуар, который сделает вашу жизнь удобнее и&nbsp;организованнее."
 				/>
-				<Socials />
+				<BlockList
+					heading="Хотите больше вдохновения?"
+					subheading="Подписывайтесь на наши соцсети, чтобы первыми видеть новые работы, следить за процессом создания и перенимать лайфхаки из мира 3D-печати."
+					list={socialList}
+				/>
 				<Gallery
 					title="3d модели"
 					loading={loading}
