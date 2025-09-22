@@ -4,7 +4,7 @@ import GalleryDeleteMedia from "../gallery-delete-media/gallery-delete-media";
 
 function EditGallery({ heading, subheading, loading, error, gallery }) {
 	return (
-		<div>
+		<>
 			<EditHgroup
 				heading={heading}
 				subheading={subheading}
@@ -15,7 +15,7 @@ function EditGallery({ heading, subheading, loading, error, gallery }) {
 				error={error}
 				gallery={gallery}
 			/>
-		</div>
+		</>
 	)
 }
 
