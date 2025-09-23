@@ -7,14 +7,17 @@ function TextArea({
 	className,
 	ref,
 	onInput,
-	noMinHeight = false,
+	noMinHeight,
 	...props
 }) {
+
+	console.log(noMinHeight);
+
 
 	const setSizeTextArea = () => {
 		if (ref?.current) {
 			const minHeight = noMinHeight ? 0 : 88;
-			ref.current.style.height = 'auto';
+			ref.current.style.height = '1em';
 			ref.current.style.height = Math.max(ref.current.scrollHeight, minHeight) + 'px';
 		}
 	}
