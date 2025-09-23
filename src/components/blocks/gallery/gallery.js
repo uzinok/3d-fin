@@ -5,7 +5,7 @@ import SubTitle from "../../ui/subtitle/subtitle";
 import { useState, useEffect } from "react";
 import Hgroup from "../../layout/hgroup/hgroup";
 
-function Gallery({ title, loading, error, data, description }) {
+function Gallery({ loading, error, data }) {
 	const [isShowDecor, setIsShowDecor] = useState(false);
 	useEffect(() => {
 		const checkSize = () => {
@@ -23,29 +23,33 @@ function Gallery({ title, loading, error, data, description }) {
 	return (
 		<section>
 			<StyledContainer>
-				{isShowDecor && (
-					<StyledDecor $animate="true" $circle="true" />
-				)}
-				<Hgroup>
-					{title && (
-					<Title as='h2'>{title}</Title>
+				{data && (
+					<>
+						{isShowDecor && (
+							<StyledDecor $animate="true" $circle="true" />
+						)}
+						<Hgroup>
+							{data.title && (
+								<Title as='h2'>{data.title}</Title>
+							)}
+							{data.subtitle && (
+								<SubTitle>{data.subtitle}</SubTitle>
+							)}
+						</Hgroup>
+						{loading && (
+							<p>Загрузка...</p>
+						)}
+						{error && (
+							<p>{error}</p>
+						)}
+						{data.items.length > 0 ? (
+							<GalleryElement gallery={data.items} />
+						) : (
+							<p>Не удалось получиь галлерею.</p>
 					)}
-					{description && (
-						<SubTitle>{description}</SubTitle>
-					)}
-				</Hgroup>
-				{loading && (
-					<p>Загрузка...</p>
-				)}
-				{error && (
-					<p>{error}</p>
-				)}
-				{data.length > 0 ? (
-						<GalleryElement gallery={data} />
-				) : (
-						<p>Не получено данных</p>
-				)}
-			</StyledContainer>
+				</>
+			)}
+				</StyledContainer>
 		</section>
 	)
 }

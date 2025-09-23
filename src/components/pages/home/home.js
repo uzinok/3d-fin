@@ -41,40 +41,40 @@ function Home() {
 		<>
 			<Index>
 				<Hero onOpen={() => setIsShowPopup(true)} hero={data.hero} />
-				{data.gallery && (
-				<Gallery
-					loading={loading}
-					error={error}
-					data={data.gallery.other.items}
-					title={data.gallery.other.title}
-					description="Персонализированные подарки запоминаются надолго. Мы&nbsp;создаем уникальные вещи, которые идеально отражают характер, увлечения или бренд. Отличный способ выделиться и&nbsp;порадовать близких, коллег или клиентов."
-				/>
-				)}
-				<BlockList
-					heading="Преимущества"
-					list={advantages}
-				/>
+
 				{data.gallery && (
 					<Gallery
-					title="Полезные вещи для дома"
-					loading={loading}
-					error={error}
-					data={data.gallery.useful.items}
-					description="3D-печать&nbsp;&mdash; это не&nbsp;только игрушки, но&nbsp;и&nbsp;практичность. Мы&nbsp;поможем напечатать недостающую деталь для бытовой техники, уникальный органайзер, подставку или любой другой аксессуар, который сделает вашу жизнь удобнее и&nbsp;организованнее."
-					/>
-				)}
-				<BlockList
-					heading="Хотите больше вдохновения?"
-					subheading="Подписывайтесь на наши соцсети, чтобы первыми видеть новые работы, следить за процессом создания и перенимать лайфхаки из мира 3D-печати."
-					list={socialList}
-				/>
-				{data.gallery && (
-					<Gallery
-						title="3d модели"
 						loading={loading}
 						error={error}
-						data={data.gallery.model.items}
-						description="Для инженеров, дизайнеров и&nbsp;изобретателей. Мы&nbsp;беремся за&nbsp;создание сложных прототипов, функциональных деталей и&nbsp;архитектурных макетов. Используем профессиональные материалы для задач, где важна точность, прочность и&nbsp;детализация."
+						data={data.gallery.other}
+					/>
+				)}
+
+				{data.advantages && (
+					<BlockList
+						data={data.advantages}
+					/>
+				)}
+
+				{data.gallery && (
+					<Gallery
+						loading={loading}
+						error={error}
+						data={data.gallery.useful}
+					/>
+				)}
+
+				{data.socialList && (
+					<BlockList
+						data={data.socialList}
+					/>
+				)}
+
+				{data.gallery && (
+					<Gallery
+						loading={loading}
+						error={error}
+						data={data.gallery.model}
 					/>
 				)}
 			</Index>

@@ -4,21 +4,25 @@ import Title from "../../ui/title/title";
 import CardList from "../../layout/card-list/card-list";
 import SubTitle from "../../ui/subtitle/subtitle";
 
-function BlockList({ list, heading, subheading }) {
+function BlockList({ data }) {
 
 	return (
 		<section>
 			<Container>
-				<Hgroup>
-					{heading && (
-						<Title as='h2'>{heading}</Title>
-					)}
-					{subheading && (
-						<SubTitle>{ subheading }</SubTitle>
-					)}
-				</Hgroup>
-				{Object.keys(list).length && (
-					<CardList list={list.items} />
+				{data && (
+					<>
+						<Hgroup>
+							{data.title && (
+								<Title as='h2'>{data.title}</Title>
+							)}
+							{data.subtitle && (
+								<SubTitle>{data.subtitle }</SubTitle>
+							)}
+						</Hgroup>
+						{data.list.length > 0 && (
+							<CardList list={data.list} />
+						)}
+					</>
 				)}
 			</Container>
 		</section>

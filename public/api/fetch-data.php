@@ -42,6 +42,7 @@ class FetchData {
     public function fetchAllData() {
         try {
             $result = array(
+                'hero' => $this->fetchHero(),
                 'advantages' => $this->fetchAdvantages(),
                 'socialList' => $this->fetchSocialList(),
                 'gallery' => $this->fetchGalleries()
@@ -52,6 +53,30 @@ class FetchData {
         } catch (Exception $e) {
             $this->sendError("Ошибка при получении данных: " . $e->getMessage());
         }
+    }
+
+    private function fetchHero() {
+        $stmt = $this->pdo->prepare("
+            SELECT title, subtitle
+            FROM dark_blocks
+            WHERE block_type = 'hero'
+            LIMIT 1
+        ");
+        $stmt->execute();
+        $hero = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($hero) {
+            return array(
+                'title' => $hero['title'],
+                'subtitle' => $hero['subtitle']
+            );
+        }
+
+        // Fallback данные если hero-блок не найден
+        return array(
+            'title' => 'Эксклюзивные 3D-модели и печать на 3D-принтере',
+            'subtitle' => 'Ваше воображение — наша печать!'
+        );
     }
 
     private function fetchAdvantages() {
@@ -66,7 +91,7 @@ class FetchData {
         $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $advantages = array(
-            'heading' => 'Преимущества',
+            'title' => 'Преимущества',
             'list' => array()
         );
 
@@ -102,15 +127,15 @@ class FetchData {
         $socialList = array(
             'title' => $items[0]['title'],
             'subtitle' => $items[0]['subtitle'],
-            'items' => array()
+            'list' => array()
         );
 
         foreach ($items as $index => $item) {
-            $socialList['items'][] = array(
+            $socialList['list'][] = array(
                 'id' => $index + 1,
                 'icon' => "",
                 'title' => $item['item_title'],
-                'description' => $item['description'],
+                'subtitle' => $item['description'],
                 'href' => $item['href'] ?: "#",
                 'linkText' => $item['link_text'] ?: "Перейти"
             );
@@ -120,26 +145,58 @@ class FetchData {
     }
 
     private function fetchGalleries() {
-        $stmt = $this->pdo->prepare("
-            SELECT g.gallery_type, g.title, g.subtitle
-            FROM galleries g
-            ORDER BY g.id
-        ");
-        $stmt->execute();
-        $galleries = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        try {
+            $stmt = $this->pdo->prepare("
+                SELECT g.id, g.gallery_type, g.title, g.subtitle
+                FROM galleries g
+                ORDER BY g.id
+            ");
+            $stmt->execute();
+            $galleries = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $result = array();
+            $result = array();
 
-        foreach ($galleries as $gallery) {
-            $galleryKey = $this->getGalleryKey($gallery['gallery_type']);
-            $result[$galleryKey] = array(
-                'title' => $gallery['title'],
-                'subtitle' => $gallery['subtitle'],
-                'items' => array() // Пока пустой массив, можно добавить реальные файлы позже
+            foreach ($galleries as $gallery) {
+                // Получаем элементы для каждой галереи
+                $itemsStmt = $this->pdo->prepare("
+                    SELECT gi.id, gi.title, gi.type, gi.src, gi.poster
+                    FROM gallery_items gi
+                    WHERE gi.gallery_id = ?
+                    ORDER BY gi.item_order
+                ");
+                $itemsStmt->execute([$gallery['id']]);
+                $items = $itemsStmt->fetchAll(PDO::FETCH_ASSOC);
+
+                // Форматируем элементы
+                $galleryItems = array();
+                foreach ($items as $item) {
+                    $galleryItems[] = array(
+                        'id' => $item['id'],
+                        'title' => $item['title'],
+                        'type' => $item['type'],
+                        'src' => $item['src'],
+                        'poster' => $item['poster'] ?: ''
+                    );
+                }
+
+                $galleryKey = $this->getGalleryKey($gallery['gallery_type']);
+                $result[$galleryKey] = array(
+                    'title' => $gallery['title'],
+                    'subtitle' => $gallery['subtitle'],
+                    'items' => $galleryItems
+                );
+            }
+
+            return $result;
+
+        } catch (Exception $e) {
+            // В случае ошибки возвращаем пустые галереи
+            return array(
+                'other' => array('title' => 'Сувениры и подарки', 'subtitle' => '', 'items' => array()),
+                'useful' => array('title' => 'Полезные вещи для дома', 'subtitle' => '', 'items' => array()),
+                'model' => array('title' => '3d модели', 'subtitle' => '', 'items' => array())
             );
         }
-
-        return $result;
     }
 
     private function getGalleryKey($galleryType) {
