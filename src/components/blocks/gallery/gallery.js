@@ -5,7 +5,7 @@ import SubTitle from "../../ui/subtitle/subtitle";
 import { useState, useEffect } from "react";
 import Hgroup from "../../layout/hgroup/hgroup";
 
-function Gallery({ title, loading, error, gallery, description }) {
+function Gallery({ title, loading, error, data, description }) {
 	const [isShowDecor, setIsShowDecor] = useState(false);
 	useEffect(() => {
 		const checkSize = () => {
@@ -40,11 +40,11 @@ function Gallery({ title, loading, error, gallery, description }) {
 				{error && (
 					<p>{error}</p>
 				)}
-				{gallery && (
-					gallery.length > 0 && (
-						<GalleryElement gallery={gallery} />
-					)
-			)}
+				{data.length > 0 ? (
+						<GalleryElement gallery={data} />
+				) : (
+						<p>Не получено данных</p>
+				)}
 			</StyledContainer>
 		</section>
 	)
