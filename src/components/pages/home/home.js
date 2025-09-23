@@ -6,8 +6,6 @@ import { useState, useEffect } from "react";
 import fetchData from "../../function/fetch-data";
 import Gallery from "../../blocks/gallery/gallery";
 import BlockList from "../../blocks/block-list/block-list";
-import { advantages } from "../../../mocks/advantages";
-import { socialList } from "../../../mocks/social-list";
 
 function Home() {
 	const [isShowPopup, setIsShowPopup] = useState(false);
