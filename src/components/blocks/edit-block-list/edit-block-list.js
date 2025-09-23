@@ -1,20 +1,19 @@
 import Container from "../../layout/container/container";
-import Hgroup from "../../layout/hgroup/hgroup";
-import SubTitle from "../../ui/subtitle/subtitle";
-import Title from "../../ui/title/title";
 import TextAreaForEdit from "../../ui/form-elements/textarea-for-edit/textarea-for-edit";
 import { useRef } from "react";
 import { StyledList } from "./styles";
+import EditHgroup from "../edit-hgroup/edit-hgroup";
 
-function EditCard({ key, data }) {
+function EditCard({ data, block }) {
 	const iconRef = useRef(null);
 	const cardTitleRef = useRef(null);
 	const cardDescriptionRef = useRef(null);
 	const cardHrefRef = useRef(null);
 	const cardLinkTextRef = useRef(null);
 	return (
-		<li key={key}>
+		<li>
 			<form>
+				<input type="hidden" name="block" value={block} />
 				<p> icon: {data.icon}
 					<TextAreaForEdit
 						ref={iconRef}
@@ -55,38 +54,25 @@ function EditCard({ key, data }) {
 	)
 }
 
-function EditBlockList({ data }) {
-	const titleRef = useRef(null);
-	const subTitleRef = useRef(null);
+function EditBlockList({ data, block }) {
 
 	return (
 		<section>
 			<Container>
 				{data.title && (
-					<Hgroup>
-						<Title>
-							<TextAreaForEdit
-								ref={titleRef}
-								defaultValue={data.title}
-							/>
-						</Title>
-							<SubTitle>
-								<TextAreaForEdit
-									ref={subTitleRef}
-									defaultValue={data.subtitle}
-								/>
-							</SubTitle>
-					</Hgroup>
+					<EditHgroup
+						data={data}
+						block={block}
+					/>
 				)}
 				{data.list && (
 					<StyledList>
 						{data.list.map((item, index) => (
-							<>
-								<EditCard
-									key={index}
-									data={item}
-								/>
-							</>
+							<EditCard
+								key={index}
+								data={item}
+								block={block}
+							/>
 					))}
 					</StyledList>
 				)}

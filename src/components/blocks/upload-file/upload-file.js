@@ -3,7 +3,7 @@ import { StyledForm, StyledInputFileWrap } from "./styles";
 import Button from "../../ui/button/button";
 import { useState } from "react";
 
-function UploadFile() {
+function UploadFile({block}) {
 	const [mediaType, setMediaType] = useState('');
 	const [newFile, setNewFile] = useState(null);
 
@@ -29,6 +29,7 @@ function UploadFile() {
 
 	return (
 		<StyledForm>
+			<input type="hidden" name="block" value={ block } />
 			{mediaType && (
 				<input type="hidden" name="type" value={ mediaType } />
 			)}

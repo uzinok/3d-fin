@@ -46,8 +46,8 @@ function Admin() {
 				<StyledHero>
 					<StyledHeroContainer>
 						<EditHgroup
-							heading={data.hero.title}
-							subheading={data.hero.subtitle}
+								data={data.hero}
+								block="hero"
 						/>
 					</StyledHeroContainer>
 					</StyledHero>
@@ -56,27 +56,36 @@ function Admin() {
 					<EditGallery
 						loading={loading}
 						error={error}
+						block="other"
 						data={data.gallery.other}
 					/>
 				)}
 				{data.advantages && (
-					<EditBlockList data={data.advantages} />
+					<EditBlockList
+						data={data.advantages}
+						block="advantages"
+					/>
 				)}
 				{data.gallery && (
 					<EditGallery
 						loading={loading}
 						error={error}
 						data={data.gallery.useful}
+						block="useful"
 					/>
 				)}
 				{data.socialList && (
-					<EditBlockList data={data.socialList} />
+					<EditBlockList
+						data={data.socialList}
+						block="socialList"
+					/>
 				)}
 				{data.gallery && (
 					<EditGallery
 						loading={loading}
 						error={error}
 						data={data.gallery.model}
+						block="model"
 					/>
 				)}
 			</Main>

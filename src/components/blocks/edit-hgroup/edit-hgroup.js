@@ -6,17 +6,18 @@ import { StyledForm } from "./styles";
 import TextAreaForEdit from "../../ui/form-elements/textarea-for-edit/textarea-for-edit";
 import { useRef } from "react";
 
-function EditHgroup({ heading, subheading }) {
+function EditHgroup({ data, block }) {
 	const titleRef = useRef(null);
 	const subTitleRef = useRef(null);
 
 	return (
 		<StyledForm>
+			<input type="hidden" name="block" value={block} />
 			<Hgroup>
 				<Title>
 					<TextAreaForEdit
 						ref={titleRef}
-						defaultValue={heading}
+						defaultValue={data.title}
 						noMinHeight="true"
 						/>
 				</Title>
@@ -24,7 +25,7 @@ function EditHgroup({ heading, subheading }) {
 				>
 					<TextAreaForEdit
 						ref={subTitleRef}
-						defaultValue={subheading}
+						defaultValue={data.subtitle}
 						noMinHeight="true"
 					/>
 				</SubTitle>

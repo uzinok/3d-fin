@@ -11,9 +11,6 @@ function TextArea({
 	...props
 }) {
 
-	console.log(noMinHeight);
-
-
 	const setSizeTextArea = () => {
 		if (ref?.current) {
 			const minHeight = noMinHeight ? 0 : 88;

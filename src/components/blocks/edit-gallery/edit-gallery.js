@@ -3,20 +3,23 @@ import UploadFile from "../upload-file/upload-file";
 import GalleryDeleteMedia from "../gallery-delete-media/gallery-delete-media";
 import Container from "../../layout/container/container";
 
-function EditGallery({ data, loading, error }) {
+function EditGallery({ data, block }) {
+
+	if (!block) {
+		return null;
+	}
 
 	return (
 		<section>
 			<Container>
 				<EditHgroup
-					heading={data.title}
-					subheading={data.subtitle}
+					block={block}
+					data={data}
 				/>
-				<UploadFile />
+				<UploadFile block={block} />
 				<GalleryDeleteMedia
-					loading={loading}
-					error={error}
 					gallery={data.items}
+					block={block}
 				/>
 			</Container>
 		</section>

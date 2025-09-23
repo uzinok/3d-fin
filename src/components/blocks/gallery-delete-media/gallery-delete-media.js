@@ -7,7 +7,7 @@ import { StyledButtonDel } from "./styles";
 import "swiper/css";
 import VisuallyHidden from "../../ui/visually-hidden/visually-hidden";
 
-function GalleryDeleteMedia({ loading, error, gallery }) {
+function GalleryDeleteMedia({ gallery, block }) {
 
 	const [showButtons, setShowButtons] = useState(false);
 	const [disabledNextButton, setDisabledNextButton] = useState(false);
@@ -25,6 +25,11 @@ function GalleryDeleteMedia({ loading, error, gallery }) {
 			swiperRef.current.swiper.slideNext();
 		}
 	};
+
+	if (!block) {
+		return null
+	}
+
 
 	return (
 		gallery.length > 0 ? (
@@ -58,22 +63,25 @@ function GalleryDeleteMedia({ loading, error, gallery }) {
 				>
 					{gallery.map((slide, index) => (
 						<StyledSwiperSlide key={index}>
-							{slide.type === 'video' ? (
-								<Video
-									src={slide.src}
-									title={slide.title}
-									poster={slide.poster}
-									preload="none"
-									muted
-									loop
-								/>
-							) : (
-								<img
-									src={slide.src}
-									alt={slide.title}
-								/>
-							)}
-							<StyledButtonDel type='button' className='button'>удалить</StyledButtonDel>
+							<form>
+								<input type="hidden" name="block" value={block} />
+								{slide.type === 'video' ? (
+									<Video
+										src={slide.src}
+										title={slide.title}
+										poster={slide.poster}
+										preload="none"
+										muted
+										loop
+									/>
+								) : (
+									<img
+										src={slide.src}
+										alt={slide.title}
+									/>
+								)}
+							<StyledButtonDel type='submit' className='button'>удалить</StyledButtonDel>
+							</form>
 						</StyledSwiperSlide>
 					))}
 				</Swiper>
