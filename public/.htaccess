@@ -1,12 +1,17 @@
 RewriteEngine On
 
-# Перенаправляем API запросы к PHP скриптам
-RewriteCond %{REQUEST_URI} ^/api/ [NC]
+# Правило для API - перенаправляем на PHP скрипты
+RewriteCond %{REQUEST_URI} ^/api/([a-zA-Z0-9_-]+)$ [NC]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^api/(.+)$ api/$1.php [L,QSA]
+RewriteRule ^api/([a-zA-Z0-9_-]+)$ api/$1.php [L]
 
-# Для всех остальных запросов - React Router
+# Для React Router - все остальные запросы на index.html
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.html [L]
+
+# Устанавливаем заголовки для API файлов
+<FilesMatch "\.php$">
+  Header set Content-Type "application/json; charset=utf-8"
+</FilesMatch>
