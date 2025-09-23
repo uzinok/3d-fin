@@ -11,28 +11,30 @@ import { socialList } from "../../../mocks/social-list";
 
 function Home() {
 	const [isShowPopup, setIsShowPopup] = useState(false);
-	const [gallery, setGallery] = useState({});
+	const [data, setData] = useState({});
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		const loadGallery = async () => {
+		const loadAllData = async () => {
 			try {
 				const result = await fetchData();
 
 				if (result.error) {
 					setError(result.error);
+					console.error('API Error:', result.error);
 				} else {
-					setGallery(result.data);
+					setData(result.data);
 				}
 			} catch (err) {
+				console.error('Loading error:', err);
 				setError('Ошибка при загрузке данных');
 			} finally {
 				setLoading(false);
 			}
 		};
 
-		loadGallery();
+		loadAllData();
 	}, []);
 
 	return (
@@ -43,7 +45,7 @@ function Home() {
 					title="Сувениры и подарки"
 					loading={loading}
 					error={error}
-					gallery={gallery['other']}
+					data={data['other']}
 					description="Персонализированные подарки запоминаются надолго. Мы&nbsp;создаем уникальные вещи, которые идеально отражают характер, увлечения или бренд. Отличный способ выделиться и&nbsp;порадовать близких, коллег или клиентов."
 				/>
 				<BlockList
@@ -54,7 +56,7 @@ function Home() {
 					title="Полезные вещи для дома"
 					loading={loading}
 					error={error}
-					gallery={gallery['useful']}
+					data={data['useful']}
 					description="3D-печать&nbsp;&mdash; это не&nbsp;только игрушки, но&nbsp;и&nbsp;практичность. Мы&nbsp;поможем напечатать недостающую деталь для бытовой техники, уникальный органайзер, подставку или любой другой аксессуар, который сделает вашу жизнь удобнее и&nbsp;организованнее."
 				/>
 				<BlockList
@@ -66,7 +68,7 @@ function Home() {
 					title="3d модели"
 					loading={loading}
 					error={error}
-					gallery={gallery['model']}
+					data={data['model']}
 					description="Для инженеров, дизайнеров и&nbsp;изобретателей. Мы&nbsp;беремся за&nbsp;создание сложных прототипов, функциональных деталей и&nbsp;архитектурных макетов. Используем профессиональные материалы для задач, где важна точность, прочность и&nbsp;детализация."
 				/>
 			</Index>

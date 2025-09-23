@@ -1,172 +1,72 @@
 export const response = {
-	"success": true,
 	"data": {
-		"useful": [{
-				"id": 23,
-				"title": "изделие",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/useful//68bf596a01770_1757370730.png"
+		"advantages": {
+			"heading": "Преимущества",
+				"list": [
+					{
+						"id": 1,
+						"title": "Высокий контакт",
+						"description": "Контакты с компьютером. Тренировка передачи для защиты. Поддержка передачи к перевозке данных.",
+						"icon": "",
+						"href": null,
+						"linkText": null
+					},
+					{
+						"id": 2,
+						"title": "Эксклюзивные модели",
+						"description": "Добавить следует только с автомобилем в виде любых подростков или любых больше вещей.",
+						"icon": "",
+						"href": null,
+						"linkText": null
+					},
+					{
+						"id": 3,
+						"title": "Ручная цеха",
+						"description": "Бетономерное кабель для высоких измерений. Наконец, чтобы разложить все вперед, нужно выйти.",
+						"icon": "",
+						"href": null,
+						"linkText": null
+					}
+				]
+		},
+		"socialList": {
+			"title": "Хотите больше вдохновения?",
+				"subtitle": "Подписывайтесь на наш концепт, чтобы первым видеть новые работы, следить за процессом создания и переживать диффака из мира 30-печати.",
+					"items": [
+						{
+							"id": 1,
+							"icon": "",
+							"title": "Наш Тибулин связи",
+							"description": "Стало точным моделей и задачей точного обозначения компьютера и точного редактора.",
+							"href": "#",
+							"linkText": "Подключение..."
+						},
+						{
+							"id": 2,
+							"icon": "",
+							"title": "Моя YouTube связи",
+							"description": "Автомобиль управления моделей. Область готовых работ и подробностей по функциям.",
+							"href": "#",
+							"linkText": "Смотрите..."
+						}
+					]
+		},
+		"gallery": {
+			"other": {
+				"title": "Сувениры и подарки",
+					"subtitle": "Переманированные подарки заполняются надолго. Мы создаем уникальные вещи, которые идеально отражают характер, увлечения или бренд. Отличный способ выделяться и продумать близких, коллег или клиентов.",
+						"items": []
 			},
-			{
-				"id": 22,
-				"title": "изделие",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/useful//68bf595f8092c_1757370719.png"
+			"useful": {
+				"title": "Полезные вещи для дома",
+					"subtitle": "30-месяц — это не только мутризм, но и практичность. Мы положим недостаток энергетических деталей, для бытовой техники, уникальный руководству, подставку или любой другой анекдотор, который сделает вашу жизнь удобнее и организовывает.",
+						"items": []
 			},
-			{
-				"id": 21,
-				"title": "изделие",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/useful//68bf5954aa653_1757370708.png"
-			},
-			{
-				"id": 20,
-				"title": "изделие",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/useful//68bf5947a42c6_1757370695.png"
-			},
-			{
-				"id": 19,
-				"title": "фигура",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/useful//68bf59336e8fe_1757370675.png"
-			},
-			{
-				"id": 18,
-				"title": "фигура",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/useful//68bf590d7385f_1757370637.png"
+			"model": {
+				"title": "3d модели",
+					"subtitle": "Для инженеров, дизайнеров и изобретателей. Мы беремся за создание сложных прототипов, функциональных деталей и архитектурных манётов. Используем профессиональные материалы для задач, где важна точность, причасти и детализации.",
+						"items": []
 			}
-		],
-		"other": [{
-				"id": 17,
-				"title": "фигура",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/other//68bf58e4cd476_1757370596.png"
-			},
-			{
-				"id": 16,
-				"title": "фигура",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/other//68bf58d950981_1757370585.png"
-			},
-			{
-				"id": 15,
-				"title": "фигура",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/other//68bf58ac82ce8_1757370540.png"
-			},
-			{
-				"id": 14,
-				"title": "фигура",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/other//68bf58a146f5b_1757370529.png"
-			},
-			{
-				"id": 13,
-				"title": "фигура",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/other//68bf5890d9508_1757370512.png"
-			},
-			{
-				"id": 12,
-				"title": "фигура",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/other//68bf5881b2ff9_1757370497.png"
-			},
-			{
-				"id": 11,
-				"title": "фигура",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/other//68bf584e9615f_1757370446.png"
-			},
-			{
-				"id": 10,
-				"title": "фигура",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/other//68bf58439ea36_1757370435.png"
-			},
-			{
-				"id": 9,
-				"title": "фигура",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/other//68bf5839e1b0e_1757370425.png"
-			},
-			{
-				"id": 8,
-				"title": "фигура",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/other//68bf583002817_1757370416.png"
-			},
-			{
-				"id": 7,
-				"title": "фигура",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/other//68bf5820a0d56_1757370400.png"
-			},
-			{
-				"id": 6,
-				"title": "фигура",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/other//68bf581706df5_1757370391.png"
-			},
-			{
-				"id": 5,
-				"title": "фигура",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/other//68bf580c24ed2_1757370380.png"
-			},
-			{
-				"id": 4,
-				"title": "фигура",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/other//68bf57fa2781c_1757370362.png"
-			},
-			{
-				"id": 3,
-				"title": "фигура",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/other//68bf57e946854_1757370345.png"
-			},
-			{
-				"id": 2,
-				"title": "фигура",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/other//68bf57dd802f9_1757370333.png"
-			},
-			{
-				"id": 1,
-				"title": "фигура",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/other//68bf57696f637_1757370217.png"
-			}
-		],
-		"model": [{
-				"id": 32,
-				"title": "самолет",
-				"type": "video",
-				"src": "https://colorlesscat.uzinok.ru/gallery/model//68c0245fc2243_1757422687.mp4",
-			},
-			{
-				"id": 31,
-				"title": "фонарь",
-				"type": "video",
-				"src": "https://colorlesscat.uzinok.ru/gallery/model//68c02402bb0cc_1757422594.mp4",
-				"poster": "https://colorlesscat.uzinok.ru/gallery/model/345234523452.png"
-			},
-			{
-				"id": 25,
-				"title": "3d модель видео логотип",
-				"type": "video",
-				"src": "https://colorlesscat.uzinok.ru/gallery/model//68bf59af50850_1757370799.mp4",
-				"poster": "https://colorlesscat.uzinok.ru/gallery/model/rwqerqwerqw.png"
-			},
-			{
-				"id": 24,
-				"title": "3d модель",
-				"type": "image",
-				"src": "https://colorlesscat.uzinok.ru/gallery/model//68bf598472fc2_1757370756.png"
-			}
-		]
+		}
 	}
 }
