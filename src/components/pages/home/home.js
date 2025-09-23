@@ -40,13 +40,13 @@ function Home() {
 	return (
 		<>
 			<Index>
-				<Hero onOpen={() => setIsShowPopup(true)} />
+				<Hero onOpen={() => setIsShowPopup(true)} hero={data.hero} />
 				{data.gallery && (
 				<Gallery
-					title={data.gallery.other.title}
 					loading={loading}
 					error={error}
 					data={data.gallery.other.items}
+					title={data.gallery.other.title}
 					description="Персонализированные подарки запоминаются надолго. Мы&nbsp;создаем уникальные вещи, которые идеально отражают характер, увлечения или бренд. Отличный способ выделиться и&nbsp;порадовать близких, коллег или клиентов."
 				/>
 				)}

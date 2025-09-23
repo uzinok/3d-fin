@@ -1,5 +1,9 @@
 export const response = {
 	"data": {
+		"hero": {
+			"title": "Эксклюзивные 3D-модели и печать на 3D-принтере",
+			"subtitle": "Ваше воображение — наша печать!"
+		},
 		"advantages": {
 			"heading": "Преимущества",
 			"list": [

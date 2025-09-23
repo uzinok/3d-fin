@@ -3,18 +3,22 @@ import SubTitle from "../../ui/subtitle/subtitle";
 import Button from "../../ui/button/button";
 import Hgroup from "../../layout/hgroup/hgroup";
 
-function Hero({ onOpen }) {
+function Hero({ onOpen, hero }) {
 	return (
 		<StyledHero>
 			<StyledHeroContainer>
 				<div>
 					<Hgroup>
-						<StyledHeroTitle>
-							Эксклюзивные 3D-модели и&nbsp;печать на&nbsp;3D-принтере
-						</StyledHeroTitle>
-						<SubTitle>
-							Ваше воображение&nbsp;&mdash; наша печать!
-						</SubTitle>
+						{hero && (
+							<>
+								<StyledHeroTitle>
+									{hero.title}
+								</StyledHeroTitle>
+								<SubTitle>
+									{hero.subtitle}
+								</SubTitle>
+							</>
+						)}
 					</Hgroup>
 					<Button
 						as="button"
