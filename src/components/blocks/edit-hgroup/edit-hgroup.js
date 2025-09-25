@@ -8,6 +8,7 @@ import { useRef, useState, useEffect } from "react";
 import validText from "../../function/valid-text";
 import getTopLeftCoordinates from "../../function/getTopLeftCoordinates";
 import ErrorMessage from "../../ui/error-message/error-message";
+import SubmitMessage, { colorMessage } from "../../ui/submit-message/submit-message";
 
 const REGEXTEXT = /^(?!.*<[^>]+>)(?!.*(function\s*\(|const\s+|let\s+|var\s+|if\s*\(|for\s*\(|while\s*\(|console\.)).*$/;
 const CLASSNAME = "invalid";
@@ -17,21 +18,24 @@ function EditHgroup({ data, block }) {
 	const subTitleRef = useRef(null);
 	const [coordinates, setCoordinates] = useState({});
 	const [textErrorMessage, setTextErrorMessage] = useState('');
+	const [messageColor, setMessageColor] = useState(colorMessage.SUCCESS);
+	const [messageText, setMessageText] = useState('');
 
 	useEffect(() => {
-		if (!textErrorMessage) {
+		if (!textErrorMessage && !messageText) {
 			return;
 		}
 		const handleClickOutside = () => {
 			setTextErrorMessage('');
+			setMessageText('');
 		}
 
-		if (textErrorMessage) {
+		if (textErrorMessage || messageText) {
 			document.addEventListener('click', handleClickOutside);
 		}
 
 		return () => { document.removeEventListener('click', handleClickOutside); }
-	},[textErrorMessage]);
+	}, [textErrorMessage, messageText]);
 
 	const setInvalidInput = (elem) => {
 		elem.focus();
@@ -72,11 +76,10 @@ function EditHgroup({ data, block }) {
 			setTextErrorMessage('Найдены не корректные символы');
 			return;
 		}
-		console.log('submit');
 
 		const formData = new FormData(e.target);
 
-		fetch('update-hgroup.php', {
+		fetch('api/update-hgroup.php', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
@@ -87,15 +90,24 @@ function EditHgroup({ data, block }) {
 				const data = await response.json();
 
 				if (response.ok && data.success) {
-					console.log(data);
+					setMessageColor(colorMessage.SUCCESS);
+					setMessageText(data.message);
 				} else {
-					console.log('error');
+					setMessageColor(colorMessage.ERROR);
+					setMessageText(data.message);
 				}
 			})
 			.catch((error) => {
-			if (error) {
-				console.log('error');
-			}
+				let errorMessage = 'Ошибка при отправке формы. Попробуйте повторить позже.';
+
+				if (error instanceof SyntaxError) {
+					errorMessage = 'Ошибка обработки ответа сервера';
+				} else {
+					errorMessage = error.message || errorMessage;
+				}
+
+				setMessageText(errorMessage);
+				setMessageColor(colorMessage.ERROR);
 		});
 	}
 
@@ -130,6 +142,11 @@ function EditHgroup({ data, block }) {
 				<ErrorMessage $coordinates={coordinates}>
 					{textErrorMessage}
 				</ErrorMessage>
+			)}
+			{messageText && (
+				<SubmitMessage color={messageColor}>
+					{messageText}
+				</SubmitMessage>
 			)}
 		</StyledForm>
 	)

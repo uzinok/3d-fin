@@ -2,9 +2,9 @@
 // Устанавливаем заголовок для JSON ответа
 header('Content-Type: application/json; charset=utf-8');
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-        // Проверка на ботов (honeypot поле)
+    // Проверка на ботов (honeypot поле)
     if (!empty($_POST['website'])) {
         http_response_code(400);
         echo json_encode(['success' => false, 'message' => 'Spam detected']);
@@ -52,7 +52,7 @@ header('Content-Type: application/json; charset=utf-8');
 
     if (mb_strlen($contact) > 100) {
         http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'слишком длинный контакт']);
+        echo json_encode(['success' => false, 'message' => 'Слишком длинный контакт']);
         exit;
     }
 

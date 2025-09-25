@@ -91,7 +91,7 @@ function FormOrder() {
 		setIsLoading(true);
 		setTextFormButton(TEXTFORBUTTON.loading);
 
-		fetch('submit-1.php', {
+		fetch('api/submit-1.php', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
