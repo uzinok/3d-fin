@@ -13,6 +13,13 @@ import SubmitMessage, { colorMessage } from "../../ui/submit-message/submit-mess
 const REGEXTEXT = /^(?!.*<[^>]+>)(?!.*(function\s*\(|const\s+|let\s+|var\s+|if\s*\(|for\s*\(|while\s*\(|console\.)).*$/;
 const CLASSNAME = "invalid";
 
+const TEXTFORBUTTON = {
+	send: 'Отправить',
+	loading: 'Отправка',
+	error: 'Ошибка',
+	success: 'Отправлено',
+}
+
 function EditHgroup({ data, block }) {
 	const titleRef = useRef(null);
 	const subTitleRef = useRef(null);
@@ -20,6 +27,8 @@ function EditHgroup({ data, block }) {
 	const [textErrorMessage, setTextErrorMessage] = useState('');
 	const [messageColor, setMessageColor] = useState(colorMessage.SUCCESS);
 	const [messageText, setMessageText] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
+	const [textButton, setTextButton] = useState(TEXTFORBUTTON.send);
 
 	useEffect(() => {
 		if (!textErrorMessage && !messageText) {
@@ -78,7 +87,8 @@ function EditHgroup({ data, block }) {
 		}
 
 		const formData = new FormData(e.target);
-
+		setIsLoading(true);
+		setTextButton(TEXTFORBUTTON.loading);
 		fetch('api/update-hgroup.php', {
 			method: 'POST',
 			headers: {
@@ -88,13 +98,14 @@ function EditHgroup({ data, block }) {
 		})
 			.then(async (response) => {
 				const data = await response.json();
-
 				if (response.ok && data.success) {
 					setMessageColor(colorMessage.SUCCESS);
 					setMessageText(data.message);
+					setTextButton(TEXTFORBUTTON.success);
 				} else {
 					setMessageColor(colorMessage.ERROR);
 					setMessageText(data.message);
+					setTextButton(TEXTFORBUTTON.error);
 				}
 			})
 			.catch((error) => {
@@ -108,7 +119,11 @@ function EditHgroup({ data, block }) {
 
 				setMessageText(errorMessage);
 				setMessageColor(colorMessage.ERROR);
-		});
+				setTextButton(TEXTFORBUTTON.error)
+			})
+			.finally(() => {
+				setIsLoading(false);
+			});
 	}
 
 	return (
@@ -137,7 +152,12 @@ function EditHgroup({ data, block }) {
 					/>
 				</SubTitle>
 			</Hgroup>
-			<Button type="submit">Изменить</Button>
+			<Button
+				disabled={isLoading}
+				type="submit"
+			>
+				{textButton}
+			</Button>
 			{textErrorMessage && (
 				<ErrorMessage $coordinates={coordinates}>
 					{textErrorMessage}

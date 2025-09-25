@@ -16,7 +16,7 @@ const CLASSNAME = "invalid";
 
 const TEXTFORBUTTON = {
 	send: 'Отправить',
-	loading: 'Загрузка',
+	loading: 'Отправка',
 	error: 'Ошибка',
 	success: 'Отправлено',
 }
