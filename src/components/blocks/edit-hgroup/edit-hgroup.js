@@ -80,7 +80,7 @@ function EditHgroup({ data, block }) {
 		const formData = new FormData(e.target);
 		setIsLoading(true);
 		setTextButton(TEXTFORBUTTON.loading);
-		fetch('api/update-hgroup.php', {
+		fetch('api/edit-hgroup.php', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
