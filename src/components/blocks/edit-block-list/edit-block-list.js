@@ -1,8 +1,13 @@
 import Container from "../../layout/container/container";
 import TextAreaForEdit from "../../ui/form-elements/textarea-for-edit/textarea-for-edit";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { StyledList } from "./styles";
 import EditHgroup from "../edit-hgroup/edit-hgroup";
+import { REGEXTEXT, CLASSNAME, TEXTFORBUTTON } from "../../../costants/const";
+import validText from "../../function/valid-text";
+import getTopLeftCoordinates from "../../function/getTopLeftCoordinates";
+import ErrorMessage from "../../ui/error-message/error-message";
+import SubmitMessage, { colorMessage } from "../../ui/submit-message/submit-message";
 
 function EditCard({ data, block }) {
 	const iconRef = useRef(null);
@@ -10,6 +15,24 @@ function EditCard({ data, block }) {
 	const cardDescriptionRef = useRef(null);
 	const cardHrefRef = useRef(null);
 	const cardLinkTextRef = useRef(null);
+	const [textErrorMessage, setTextErrorMessage] = useState('');
+
+	const setValidInput = (elem) => {
+		elem.classList.remove(CLASSNAME);
+		if (textErrorMessage) {
+			setTextErrorMessage('')
+		}
+	}
+
+	const handleValidInput = (elem) => {
+		if (validText(elem, 0, 1000, REGEXTEXT)) {
+			setValidInput(elem);
+		}
+	}
+
+	const handleSave = () => {}
+
+
 	return (
 		<li>
 			<form>
