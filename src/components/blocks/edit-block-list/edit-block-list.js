@@ -12,6 +12,7 @@ import Button from "../../ui/button/button";
 
 function EditCard({ data, block }) {
 	const blockRef = useRef(null);
+	const idRef = useRef(null);
 	const iconRef = useRef(null);
 	const cardTitleRef = useRef(null);
 	const cardDescriptionRef = useRef(null);
@@ -23,6 +24,9 @@ function EditCard({ data, block }) {
 	const [coordinates, setCoordinates] = useState({});
 	const [textButton, setTextButton] = useState(TEXTFORBUTTON.send);
 	const [isLoading, setIsLoading] = useState(false);
+
+	console.log(data);
+
 
 	const setValidInput = (elem) => {
 		elem.classList.remove(CLASSNAME);
@@ -51,6 +55,12 @@ function EditCard({ data, block }) {
 			setMessageColor(colorMessage.ERROR);
 			return;
 		}
+
+		if (!idRef.current.value) {
+			setMessageText('не удалось определить id');
+			setMessageColor(colorMessage.ERROR);
+			return;
+}
 
 		if (!validText(iconRef.current.value, 0, 1000, REGEXTEXT)) {
 			setCoordinates(getTopLeftCoordinates(iconRef.current));
@@ -134,6 +144,7 @@ function EditCard({ data, block }) {
 	return (
 		<li>
 			<StyledForm
+				accept-charset="UTF-8"
 				onSubmit={handleSave}
 			>
 				<input
@@ -141,13 +152,20 @@ function EditCard({ data, block }) {
 					type="hidden"
 					name="block"
 					value={block}
-					/>
+				/>
+				<input
+					ref={idRef}
+					type="hidden"
+					name="id"
+					value={data.id}
+				/>
 				<p> icon: {data.icon}
 					<TextAreaForEdit
 						ref={iconRef}
 						defaultValue={data.icon}
 						noMinHeight="true"
 						onInput={() => handleValidInput(iconRef.current)}
+						name="icon"
 						/>
 				</p>
 				<p>title:
@@ -156,6 +174,7 @@ function EditCard({ data, block }) {
 						defaultValue={data.title}
 						noMinHeight="true"
 						onInput={() => handleValidInput(cardTitleRef.current)}
+						name="title"
 						/>
 				</p>
 				<p>description:
@@ -164,6 +183,7 @@ function EditCard({ data, block }) {
 						defaultValue={data.description}
 						noMinHeight="true"
 						onInput={() => handleValidInput(cardDescriptionRef.current)}
+						name="description"
 						/>
 				</p>
 				<p>href:
@@ -172,6 +192,7 @@ function EditCard({ data, block }) {
 						defaultValue={data.href}
 						noMinHeight="true"
 						onInput={() => handleValidInput(cardHrefRef.current)}
+						name="href"
 						/>
 				</p>
 				<p>linkText:
@@ -180,9 +201,13 @@ function EditCard({ data, block }) {
 						defaultValue={data.linkText}
 						noMinHeight="true"
 						onInput={() => handleValidInput(cardLinkTextRef.current)}
+						name="linkText"
 					/>
 				</p>
-				<Button type="submit">
+				<Button
+					type="submit"
+					disabled={isLoading}
+				>
 					{textButton}
 				</Button>
 				{messageText && (

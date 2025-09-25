@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Устанавливаем заголовки
-header('Content-Type: application/json; charset=utf-8');
+header('Content-Type: application/json; charset=UTF-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
@@ -25,9 +25,25 @@ class FetchData {
 
     public function __construct() {
         try {
-            $this->pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4", DB_USER, DB_PASS);
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+            // Добавляем опции для PDO
+            $options = [
+                PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4',
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            ];
+
+            $this->pdo = new PDO(
+                "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4",
+                DB_USER,
+                DB_PASS,
+                $options
+            );
+
+            // Дополнительные настройки кодировки
+            $this->pdo->exec("SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci");
+            $this->pdo->exec("SET CHARACTER SET utf8mb4");
+
         } catch (PDOException $e) {
             $this->sendError("Ошибка подключения к базе данных: " . $e->getMessage());
         }
@@ -41,10 +57,12 @@ class FetchData {
 
     public function fetchAllData() {
         try {
+            $combinedBlocks = $this->fetchCombinedBlocks();
+
             $result = array(
                 'hero' => $this->fetchHero(),
-                'advantages' => $this->fetchAdvantages(),
-                'socialList' => $this->fetchSocialList(),
+                'advantages' => $combinedBlocks['advantages'] ?? array('title' => 'Преимущества', 'list' => array()),
+                'socialList' => $combinedBlocks['social'] ?? null,
                 'gallery' => $this->fetchGalleries()
             );
 
@@ -79,69 +97,49 @@ class FetchData {
         );
     }
 
-    private function fetchAdvantages() {
+    private function fetchCombinedBlocks() {
         $stmt = $this->pdo->prepare("
-            SELECT dbi.title, dbi.description
+            SELECT
+                db.block_type,
+                dbi.id,
+                dbi.icon,
+                dbi.title,
+                dbi.description,
+                dbi.href,
+                dbi.link_text,
+                dbi.item_order
             FROM dark_blocks db
             JOIN dark_block_items dbi ON db.id = dbi.dark_block_id
-            WHERE db.block_type = 'advantages'
-            ORDER BY dbi.item_order
+            WHERE db.block_type IN ('advantages', 'social')
+            ORDER BY db.block_type, dbi.item_order
         ");
         $stmt->execute();
         $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $advantages = array(
-            'title' => 'Преимущества',
-            'list' => array()
-        );
+        $result = array();
 
-        foreach ($items as $index => $item) {
-            $advantages['list'][] = array(
-                'id' => $index + 1,
+        foreach ($items as $item) {
+            $blockType = $item['block_type'];
+
+            if (!isset($result[$blockType])) {
+                $result[$blockType] = array(
+                    'title' => $blockType === 'advantages' ? 'Преимущества' : 'Социальные сети',
+                    'subtitle' => $blockType === 'social' ? 'Подпишитесь на нас в соцсетях' : '',
+                    'list' => array()
+                );
+            }
+
+            $result[$blockType]['list'][] = array(
+                'id' => (int)$item['id'],
+                'icon' => !empty($item['icon']) ? base64_decode($item['icon']) : "",
                 'title' => $item['title'],
                 'description' => $item['description'],
-                'icon' => "",
-                'href' => null,
-                'linkText' => null
+                'href' => $item['href'] ?: ($blockType === 'social' ? "#" : null),
+                'linkText' => $item['link_text'] ?: ($blockType === 'social' ? "Перейти" : null)
             );
         }
 
-        return $advantages;
-    }
-
-    private function fetchSocialList() {
-        $stmt = $this->pdo->prepare("
-            SELECT db.title, db.subtitle, dbi.title as item_title, dbi.description, dbi.href, dbi.link_text
-            FROM dark_blocks db
-            JOIN dark_block_items dbi ON db.id = dbi.dark_block_id
-            WHERE db.block_type = 'social'
-            ORDER BY dbi.item_order
-        ");
-        $stmt->execute();
-        $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        if (empty($items)) {
-            return null;
-        }
-
-        $socialList = array(
-            'title' => $items[0]['title'],
-            'subtitle' => $items[0]['subtitle'],
-            'list' => array()
-        );
-
-        foreach ($items as $index => $item) {
-            $socialList['list'][] = array(
-                'id' => $index + 1,
-                'icon' => "",
-                'title' => $item['item_title'],
-                'subtitle' => $item['description'],
-                'href' => $item['href'] ?: "#",
-                'linkText' => $item['link_text'] ?: "Перейти"
-            );
-        }
-
-        return $socialList;
+        return $result;
     }
 
     private function fetchGalleries() {
