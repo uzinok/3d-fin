@@ -61,8 +61,8 @@ class FetchData {
 
             $result = array(
                 'hero' => $this->fetchHero(),
-                'advantages' => $combinedBlocks['advantages'] ?? array('title' => 'Преимущества', 'list' => array()),
-                'socialList' => $combinedBlocks['social'] ?? null,
+                'advantages' => $combinedBlocks['advantages'] ?? null,
+                'social' => $combinedBlocks['social'] ?? null,
                 'gallery' => $this->fetchGalleries()
             );
 
@@ -83,21 +83,32 @@ class FetchData {
         $stmt->execute();
         $hero = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($hero) {
-            return array(
-                'title' => $hero['title'],
-                'subtitle' => $hero['subtitle']
-            );
-        }
-
-        // Fallback данные если hero-блок не найден
-        return array(
-            'title' => 'Эксклюзивные 3D-модели и печать на 3D-принтере',
-            'subtitle' => 'Ваше воображение — наша печать!'
-        );
+        return $hero ? array(
+            'title' => $hero['title'],
+            'subtitle' => $hero['subtitle']
+        ) : null;
     }
 
     private function fetchCombinedBlocks() {
+        // Сначала получаем заголовки блоков из таблицы dark_blocks
+        $blocksStmt = $this->pdo->prepare("
+            SELECT block_type, title, subtitle
+            FROM dark_blocks
+            WHERE block_type IN ('advantages', 'social')
+        ");
+        $blocksStmt->execute();
+        $blocks = $blocksStmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Создаем массив с заголовками блоков
+        $blockTitles = [];
+        foreach ($blocks as $block) {
+            $blockTitles[$block['block_type']] = [
+                'title' => $block['title'],
+                'subtitle' => $block['subtitle']
+            ];
+        }
+
+        // Теперь получаем элементы блоков
         $stmt = $this->pdo->prepare("
             SELECT
                 db.block_type,
@@ -122,9 +133,15 @@ class FetchData {
             $blockType = $item['block_type'];
 
             if (!isset($result[$blockType])) {
-                $result[$blockType] = array(
+                // Используем заголовки из базы данных или значения по умолчанию, если их нет
+                $blockInfo = $blockTitles[$blockType] ?? [
                     'title' => $blockType === 'advantages' ? 'Преимущества' : 'Социальные сети',
-                    'subtitle' => $blockType === 'social' ? 'Подпишитесь на нас в соцсетях' : '',
+                    'subtitle' => $blockType === 'social' ? 'Подпишитесь на нас в соцсетях' : ''
+                ];
+
+                $result[$blockType] = array(
+                    'title' => $blockInfo['title'],
+                    'subtitle' => $blockInfo['subtitle'],
                     'list' => array()
                 );
             }
@@ -134,8 +151,8 @@ class FetchData {
                 'icon' => !empty($item['icon']) ? base64_decode($item['icon']) : "",
                 'title' => $item['title'],
                 'description' => $item['description'],
-                'href' => $item['href'] ?: ($blockType === 'social' ? "#" : null),
-                'linkText' => $item['link_text'] ?: ($blockType === 'social' ? "Перейти" : null)
+                'href' => $item['href'],
+                'linkText' => $item['link_text']
             );
         }
 
@@ -173,7 +190,7 @@ class FetchData {
                         'title' => $item['title'],
                         'type' => $item['type'],
                         'src' => $item['src'],
-                        'poster' => $item['poster'] ?: ''
+                        'poster' => $item['poster']
                     );
                 }
 
@@ -188,12 +205,7 @@ class FetchData {
             return $result;
 
         } catch (Exception $e) {
-            // В случае ошибки возвращаем пустые галереи
-            return array(
-                'other' => array('title' => 'Сувениры и подарки', 'subtitle' => '', 'items' => array()),
-                'useful' => array('title' => 'Полезные вещи для дома', 'subtitle' => '', 'items' => array()),
-                'model' => array('title' => '3d модели', 'subtitle' => '', 'items' => array())
-            );
+            return array();
         }
     }
 

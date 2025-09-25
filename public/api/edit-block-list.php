@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Для иконки - только самые опасные символы
     $icon = preg_replace('/[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/u', '', $icon);
 
-    if (!in_array($block, ['advantages', 'socialList'])) {
+    if (!in_array($block, ['advantages', 'social'])) {
         http_response_code(400);
         echo json_encode(['success' => false, 'message' => 'Не верно указано название блока']);
         exit;

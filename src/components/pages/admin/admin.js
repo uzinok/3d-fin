@@ -74,10 +74,10 @@ function Admin() {
 						block="useful"
 					/>
 				)}
-				{data.socialList && (
+				{data.social && (
 					<EditBlockList
-						data={data.socialList}
-						block="socialList"
+						data={data.social}
+						block="social"
 					/>
 				)}
 				{data.gallery && (

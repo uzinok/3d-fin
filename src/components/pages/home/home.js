@@ -62,9 +62,9 @@ function Home() {
 					/>
 				)}
 
-				{data.socialList && (
+				{data.social && (
 					<BlockList
-						data={data.socialList}
+						data={data.social}
 					/>
 				)}
 
