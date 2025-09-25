@@ -9,16 +9,7 @@ import validText from "../../function/valid-text";
 import getTopLeftCoordinates from "../../function/getTopLeftCoordinates";
 import ErrorMessage from "../../ui/error-message/error-message";
 import SubmitMessage, { colorMessage } from "../../ui/submit-message/submit-message";
-
-const REGEXTEXT = /^(?!.*<[^>]+>)(?!.*(function\s*\(|const\s+|let\s+|var\s+|if\s*\(|for\s*\(|while\s*\(|console\.)).*$/;
-const CLASSNAME = "invalid";
-
-const TEXTFORBUTTON = {
-	send: 'Отправить',
-	loading: 'Отправка',
-	error: 'Ошибка',
-	success: 'Отправлено',
-}
+import { REGEXTEXT, CLASSNAME, TEXTFORBUTTON } from "../../../costants/const";
 
 function EditHgroup({ data, block }) {
 	const titleRef = useRef(null);

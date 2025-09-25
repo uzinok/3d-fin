@@ -7,19 +7,7 @@ import getTopLeftCoordinates from "../../function/getTopLeftCoordinates";
 import ErrorMessage from "../../ui/error-message/error-message";
 import SubmitMessage, { colorMessage } from "../../ui/submit-message/submit-message";
 import validText from "../../function/valid-text";
-
-const REGEXTEXT = /^(?!.*<[^>]+>)(?!.*(function\s*\(|const\s+|let\s+|var\s+|if\s*\(|for\s*\(|while\s*\(|console\.)).*$/;
-const PHONEREGEX = /^(\+7|8)[0-9]{10}$/;
-const TELEGRAMREGEX = /^@[a-zA-Z0-9_]{5,}$/;
-
-const CLASSNAME = "invalid";
-
-const TEXTFORBUTTON = {
-	send: 'Отправить',
-	loading: 'Отправка',
-	error: 'Ошибка',
-	success: 'Отправлено',
-}
+import { REGEXTEXT, PHONEREGEX, TELEGRAMREGEX, CLASSNAME, TEXTFORBUTTON } from "../../../costants/const";
 
 function FormOrder() {
 	const [coordinates, setCoordinates] = useState({});
