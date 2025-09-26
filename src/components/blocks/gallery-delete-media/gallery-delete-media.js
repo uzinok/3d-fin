@@ -80,7 +80,7 @@ function GalleryDeleteMedia({ gallery, block }) {
 										alt={slide.title}
 									/>
 								)}
-							<StyledButtonDel type='submit' className='button'>удалить</StyledButtonDel>
+							<StyledButtonDel type='button'>удалить</StyledButtonDel>
 							</form>
 						</StyledSwiperSlide>
 					))}
