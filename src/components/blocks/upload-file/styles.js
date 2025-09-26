@@ -7,7 +7,7 @@ export const StyledForm = styled.form `
 	align-items: flex-end;
 	flex-wrap: wrap;
 	background-color: #d4b383;
-	padding: 20px;
+	padding: 10px;
 	border-radius: 6px;
 	margin-bottom: 1em;
 
@@ -26,8 +26,8 @@ export const StyledForm = styled.form `
 export const StyledInputFileWrap = styled.label `
 	background-color: #ffffff;
 	display: block;
-	width: 150px;
-	height: 150px;
+	width: 170px;
+	height: 170px;
 	position: relative;
 	padding: 5px;
 	border: 5px solid #ffffff;

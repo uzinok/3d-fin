@@ -11,6 +11,7 @@ import ErrorMessage from "../../ui/error-message/error-message";
 function UploadFile({ block }) {
 	const titleRef = useRef(null);
 	const fileRef = useRef(null);
+	const posterRef = useRef(null);
 	const [mediaType, setMediaType] = useState('');
 	const [newFile, setNewFile] = useState(null);
 	const [messageText, setMessageText] = useState('');
@@ -19,6 +20,7 @@ function UploadFile({ block }) {
 	const [coordinates, setCoordinates] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
 	const [buttonText, setButtonText] = useState(TEXTFORBUTTON.send);
+	const [poster, setPoster] = useState(null);
 
 	const setInvalidInput = (elem) => {
 		elem.focus();
@@ -63,7 +65,39 @@ function UploadFile({ block }) {
 		};
 
 		reader.readAsDataURL(file);
+	}
 
+	const handlePosterChange = (e) => {
+		console.log(e.target.files[0]);
+
+		const file = e.target.files[0];
+		if (!file) return;
+
+		// Проверка размера файла (например, 10MB)
+		const maxSize = 10 * 1024 * 1024;
+		if (file.size > maxSize) {
+			setMessageText('Файл слишком большой. Максимальный размер: 10MB');
+			setMessageColor(colorMessage.ERROR);
+			e.target.value = ''; // очистить input
+			return;
+		}
+
+		// Проверка MIME типа
+		const allowedTypes = ['image/jpeg', 'image/png'];
+		if (!allowedTypes.includes(file.type)) {
+			setMessageText('Недопустимый тип файла');
+			setMessageColor(colorMessage.ERROR);
+			e.target.value = '';
+			return;
+		}
+
+		const reader = new FileReader();
+
+		reader.onloadend = () => {
+			setPoster(reader.result);
+		};
+
+		reader.readAsDataURL(file);
 	}
 
 	const handleInputTitle = () => {
@@ -103,7 +137,7 @@ function UploadFile({ block }) {
 		const formData = new FormData(e.target);
 		setButtonText(TEXTFORBUTTON.loading);
 		setIsLoading(true);
-		fetch('api/upload-gallery.php', {
+		fetch('api/upload-file.php', {
 			method: 'POST',
 			body: formData
 		}).then(async (response) => {
@@ -165,15 +199,36 @@ function UploadFile({ block }) {
 					<video src={ newFile } controls />
 				)}
 				{mediaType === "image" && (
-					<img src={ newFile } alt="Изображение" />
+					<img
+						src={newFile}
+						alt="Изображение"
+					/>
 				)}
 				<InputField
 					ref={fileRef}
 					type="file"
+					name="file"
 					accept="image/png, image/jpeg, video/mp4"
 					onChange={ handleFileChange }
 					/>
 			</StyledInputFileWrap>
+			{mediaType === "video" && (
+				<StyledInputFileWrap>
+					<InputField
+						ref={posterRef}
+						type="file"
+						name="poster"
+						accept="image/png, image/jpeg"
+						onChange={handlePosterChange}
+					/>
+					{poster && (
+						<img
+							src={poster}
+							alt="Постер"
+						/>
+					)}
+				</StyledInputFileWrap>
+			)}
 			<div>
 				<InputField
 					ref={titleRef}
