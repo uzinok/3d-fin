@@ -18,6 +18,7 @@ const SubmitMessage = styled(Title)`
 	font-size: 1.5em;
 	text-align: center;
 	color: ${(props) => props.color ? props.color : "white"};
+	z-index: 1;
 `
 
 export default SubmitMessage;

@@ -25,9 +25,6 @@ function EditCard({ data, block }) {
 	const [textButton, setTextButton] = useState(TEXTFORBUTTON.send);
 	const [isLoading, setIsLoading] = useState(false);
 
-	console.log(data);
-
-
 	const setValidInput = (elem) => {
 		elem.classList.remove(CLASSNAME);
 		if (textErrorMessage) {
@@ -144,7 +141,7 @@ function EditCard({ data, block }) {
 	return (
 		<li>
 			<StyledForm
-				accept-charset="UTF-8"
+				acceptCharset="UTF-8"
 				onSubmit={handleSave}
 			>
 				<input
