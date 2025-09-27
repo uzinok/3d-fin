@@ -7,6 +7,62 @@ import { StyledButtonDel } from "./styles";
 import "swiper/css";
 import VisuallyHidden from "../../ui/visually-hidden/visually-hidden";
 
+function FormDeleteMedia({ slide, block }) {
+
+	function handleSubmit(event) {
+		event.preventDefault();
+		const formData = new FormData(event.target);
+
+		fetch('/api/gallery-delete-media.php', {
+			method: 'POST',
+			body: formData,
+		}).then(async (response) => {
+			const data = await response.json();
+
+			if (response.ok && data.success) {
+				console.log('Media deleted successfully');
+			} else {
+				console.error('Failed to delete media');
+			}
+		}).catch((error) => {
+			let errorMessage = 'Ошибка при отправке формы. Попробуйте повторить позже.';
+
+			if (error instanceof SyntaxError) {
+				console.error = 'Ошибка обработки ответа сервера';
+			} else {
+				console.error = error.message || errorMessage;
+			}
+		})
+	}
+
+	return (
+		<form onSubmit={handleSubmit}>
+			<input type="hidden" name="block" value={block} />
+			{slide.type === 'video' ? (
+				<Video
+					src={slide.src}
+					title={slide.title}
+					poster={slide.poster}
+					preload="none"
+					muted
+					loop
+				/>
+			) : (
+				<img
+					src={slide.src}
+					alt={slide.title}
+				/>
+			)}
+			<StyledButtonDel type='submit'>удалить</StyledButtonDel>
+			<input
+				type="hidden"
+				name="id"
+				value={slide.id}
+			/>
+		</form>
+	)
+}
+
 function GalleryDeleteMedia({ gallery, block }) {
 
 	const [showButtons, setShowButtons] = useState(false);
@@ -29,7 +85,6 @@ function GalleryDeleteMedia({ gallery, block }) {
 	if (!block) {
 		return null
 	}
-
 
 	return (
 		gallery.length > 0 ? (
@@ -63,25 +118,7 @@ function GalleryDeleteMedia({ gallery, block }) {
 				>
 					{gallery.map((slide, index) => (
 						<StyledSwiperSlide key={index}>
-							<form>
-								<input type="hidden" name="block" value={block} />
-								{slide.type === 'video' ? (
-									<Video
-										src={slide.src}
-										title={slide.title}
-										poster={slide.poster}
-										preload="none"
-										muted
-										loop
-									/>
-								) : (
-									<img
-										src={slide.src}
-										alt={slide.title}
-									/>
-								)}
-							<StyledButtonDel type='button'>удалить</StyledButtonDel>
-							</form>
+							<FormDeleteMedia slide={slide} block={block} />
 						</StyledSwiperSlide>
 					))}
 				</Swiper>
