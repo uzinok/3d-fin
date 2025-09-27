@@ -112,11 +112,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        // Логируем данные перед записью для отладки
-        error_log("Icon to save: " . $icon);
-        error_log("Icon length: " . strlen($icon));
-        error_log("Icon hex: " . bin2hex($icon));
-
         // Обновляем данные элемента
         $stmt = $pdo->prepare("
             UPDATE dark_block_items
@@ -130,10 +125,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $verify_stmt = $pdo->prepare("SELECT icon FROM dark_block_items WHERE id = ?");
         $verify_stmt->execute([$id]);
         $saved_icon = $verify_stmt->fetchColumn();
-
-        error_log("Saved icon: " . $saved_icon);
-        error_log("Saved icon length: " . strlen($saved_icon));
-        error_log("Saved icon hex: " . bin2hex($saved_icon));
 
         echo json_encode([
             'success' => true,
@@ -149,7 +140,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
     } catch (PDOException $e) {
-        error_log("Database error: " . $e->getMessage());
         http_response_code(500);
         echo json_encode([
             'success' => false,

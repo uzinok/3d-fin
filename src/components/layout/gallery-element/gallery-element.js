@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { Swiper } from 'swiper/react';
 import { A11y } from 'swiper/modules';
 import { StyledSwiperSlide, StyledSwiperContainer, StyledNavigationButton } from './styles';
@@ -7,12 +7,17 @@ import Video from '../../ui/video/video';
 import 'swiper/css';
 import VisuallyHidden from '../../ui/visually-hidden/visually-hidden';
 
-function GalleryElement ({ gallery }) {
-
+function GalleryElement({ gallery }) {
 	const [showButtons, setShowButtons] = useState(false);
 	const [disabledNextButton, setDisabledNextButton] = useState(false);
 	const [disabledPrevButton, setDisabledPrevButton] = useState(true);
 	const swiperRef = useRef(null);
+
+	// Создаем перевернутую копию массива gallery только при его изменении
+	const reversedGallery = useMemo(() => {
+		// Создаем копию массива и переворачиваем ее
+		return [...gallery].reverse();
+	}, [gallery]);
 
 	const handleprev = () => {
 		if (swiperRef.current && typeof swiperRef.current.swiper.slidePrev === "function") {
@@ -56,7 +61,7 @@ function GalleryElement ({ gallery }) {
 						setDisabledNextButton(swiper.isEnd);
 					}}
 				>
-					{gallery.map((slide, index) => (
+					{reversedGallery.map((slide, index) => (
 						<StyledSwiperSlide key={index}>
 							{slide.type === 'video' ? (
 								<Video

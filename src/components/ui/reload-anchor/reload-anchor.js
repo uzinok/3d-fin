@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
 
 export function reloadAnchor(id) {
-	console.log(id);
-
 	if (id) {
 		// Сохраняем блок в sessionStorage перед перезагрузкой
 		sessionStorage.setItem('scrollToBlock', id);
@@ -16,7 +14,6 @@ function ReloadAnchor() {
 	useEffect(() => {
 		// Проверяем, есть ли сохраненный блок для прокрутки
 		const id = sessionStorage.getItem('scrollToBlock');
-		console.log(id);
 
 		if (id) {
 			// Прокручиваем к блоку

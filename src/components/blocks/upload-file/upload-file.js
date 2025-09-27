@@ -93,7 +93,6 @@ function UploadFile({ block }) {
 	}
 
 	const handlePosterChange = (e) => {
-		console.log(e.target.files[0]);
 
 		const file = e.target.files[0];
 		if (!file) return;

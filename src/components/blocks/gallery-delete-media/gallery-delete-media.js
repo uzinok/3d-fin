@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { Swiper } from "swiper/react";
 import { A11y } from "swiper/modules";
 import { StyledSwiperSlide, StyledSwiperContainer, StyledNavigationButton } from "../../layout/gallery-element/styles";
@@ -22,7 +22,6 @@ function FormDeleteMedia({ slide, block, scrollId }) {
 
 			if (response.ok && data.success) {
 				console.log('Media deleted successfully');
-				console.log(scrollId);
 				reloadAnchor(scrollId);
 			} else {
 				console.error('Failed to delete media');
@@ -73,6 +72,11 @@ function GalleryDeleteMedia({ gallery, block }) {
 	const [disabledPrevButton, setDisabledPrevButton] = useState(true);
 	const swiperRef = useRef(null);
 
+	const reversedGallery = useMemo(() => {
+			// Создаем копию массива и переворачиваем ее
+			return [...gallery].reverse();
+		}, [gallery]);
+
 	const handleprev = () => {
 		if (swiperRef.current && typeof swiperRef.current.swiper.slidePrev === "function") {
 			swiperRef.current.swiper.slidePrev();
@@ -120,7 +124,7 @@ function GalleryDeleteMedia({ gallery, block }) {
 						setDisabledNextButton(swiper.isEnd);
 					}}
 				>
-					{gallery.map((slide, index) => (
+					{reversedGallery.map((slide, index) => (
 						<StyledSwiperSlide key={index}>
 							<FormDeleteMedia slide={slide} block={block} scrollId={id} />
 						</StyledSwiperSlide>
