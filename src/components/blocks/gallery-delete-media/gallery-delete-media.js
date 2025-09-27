@@ -7,8 +7,11 @@ import { StyledButtonDel } from "./styles";
 import "swiper/css";
 import VisuallyHidden from "../../ui/visually-hidden/visually-hidden";
 import ReloadAnchor, { reloadAnchor } from "../../ui/reload-anchor/reload-anchor";
+import SubmitMessage, { colorMessage } from "../../ui/submit-message/submit-message";
 
 function FormDeleteMedia({ slide, block, scrollId }) {
+	const [messageText, setMessageText] = useState('');
+	const [massageColor, setMassageColor] = useState('');
 
 	function handleSubmit(event) {
 		event.preventDefault();
@@ -21,18 +24,23 @@ function FormDeleteMedia({ slide, block, scrollId }) {
 			const data = await response.json();
 
 			if (response.ok && data.success) {
-				console.log('Media deleted successfully');
+				setMessageText(data.message);
+				setMassageColor(colorMessage.SUCCESS);
 				reloadAnchor(scrollId);
 			} else {
-				console.error('Failed to delete media');
+				setMessageText(data.message);
+				setMassageColor(colorMessage.ERROR);
 			}
 		}).catch((error) => {
 			let errorMessage = 'Ошибка при отправке формы. Попробуйте повторить позже.';
 			if (error instanceof SyntaxError) {
-				console.error = 'Ошибка обработки ответа сервера';
+				errorMessage = 'Ошибка обработки ответа сервера';
 			} else {
-				console.error = error.message || errorMessage;
+				errorMessage = error.message || errorMessage;
 			}
+
+			setMessageText(errorMessage);
+			setMassageColor(colorMessage.ERROR);
 		});
 	}
 
@@ -61,6 +69,13 @@ function FormDeleteMedia({ slide, block, scrollId }) {
 				name="id"
 				value={slide.id}
 			/>
+			{messageText && (
+				<SubmitMessage
+					color={massageColor}
+				>
+					{messageText}
+				</SubmitMessage>
+			)}
 		</form>
 	)
 }
