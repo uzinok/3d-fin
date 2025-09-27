@@ -20,8 +20,10 @@ function ReloadAnchor() {
 
 		if (id) {
 			// Прокручиваем к блоку
-			const element = document.getElementById(id);
-			element.scrollIntoView();
+			window.setTimeout(() => {
+				const element = document.getElementById(id);
+				element.scrollIntoView();
+			}, 50)
 			// Удаляем запись из storage
 			sessionStorage.removeItem('scrollToBlock');
 		}
