@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Включаем вывод ошибок для отладки (убрать в продакшене)
+// Включаем вывод ошибок для отладки
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -30,22 +30,10 @@ if (isset($_SESSION['last_upload']) && (time() - $_SESSION['last_upload']) < 30)
 }
 $_SESSION['last_upload'] = time();
 
-// Проверяем наличие файла
-if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
-    $errorMessages = [
-        UPLOAD_ERR_INI_SIZE => 'Размер файла превышает разрешенный',
-        UPLOAD_ERR_FORM_SIZE => 'Размер файла превышает указанный в форме',
-        UPLOAD_ERR_PARTIAL => 'Файл был загружен только частично',
-        UPLOAD_ERR_NO_FILE => 'Файл не был загружен',
-        UPLOAD_ERR_NO_TMP_DIR => 'Отсутствует временная папка',
-        UPLOAD_ERR_CANT_WRITE => 'Не удалось записать файл на диск',
-        UPLOAD_ERR_EXTENSION => 'Расширение PHP остановило загрузку файла'
-    ];
-
-    $errorMessage = $errorMessages[$_FILES['file']['error']] ?? 'Неизвестная ошибка загрузки';
-    http_response_code(400);
-    echo json_encode(['success' => false, 'message' => $errorMessage]);
-    exit;
+// Проверяем поддержку WebP
+$webpSupported = false;
+if (extension_loaded('imagick')) {
+    $webpSupported = in_array('WEBP', Imagick::queryFormats());
 }
 
 // Получаем данные из формы
@@ -68,7 +56,40 @@ if (!in_array($mediaType, ['image', 'video'])) {
     exit;
 }
 
-// Проверка размера файла (10MB)
+// Проверка наличия основного файла
+if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
+    $errorMessages = [
+        UPLOAD_ERR_INI_SIZE => 'Размер файла превышает разрешенный',
+        UPLOAD_ERR_FORM_SIZE => 'Размер файла превышает указанный в форме',
+        UPLOAD_ERR_PARTIAL => 'Файл был загружен только частично',
+        UPLOAD_ERR_NO_FILE => 'Файл не был загружен',
+        UPLOAD_ERR_NO_TMP_DIR => 'Отсутствует временная папка',
+        UPLOAD_ERR_CANT_WRITE => 'Не удалось записать файл на диск',
+        UPLOAD_ERR_EXTENSION => 'Расширение PHP остановило загрузку файла'
+    ];
+
+    $errorMessage = $errorMessages[$_FILES['file']['error']] ?? 'Неизвестная ошибка загрузки';
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => $errorMessage]);
+    exit;
+}
+
+// Проверка постера для видео
+if ($mediaType === 'video') {
+    if (!isset($_FILES['poster']) || $_FILES['poster']['error'] !== UPLOAD_ERR_OK) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Для видео необходимо загрузить постер']);
+        exit;
+    }
+} else {
+    if (isset($_FILES['poster']) && $_FILES['poster']['error'] === UPLOAD_ERR_OK) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Постер требуется только для видео']);
+        exit;
+    }
+}
+
+// Проверка размера файлов (10MB)
 $maxFileSize = 10 * 1024 * 1024;
 if ($_FILES['file']['size'] > $maxFileSize) {
     http_response_code(400);
@@ -76,30 +97,58 @@ if ($_FILES['file']['size'] > $maxFileSize) {
     exit;
 }
 
-// Проверка MIME типа
+if ($mediaType === 'video' && $_FILES['poster']['size'] > $maxFileSize) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Размер постера превышает 10MB']);
+    exit;
+}
+
+// Проверка MIME типов
 $allowedMimeTypes = [
-    'image/jpeg' => 'jpg',
-    'image/png' => 'png',
+    'image/jpeg' => $webpSupported ? 'webp' : 'jpg',
+    'image/png' => $webpSupported ? 'webp' : 'png',
     'video/mp4' => 'mp4'
 ];
 
 $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
-$mimeType = finfo_file($fileInfo, $_FILES['file']['tmp_name']);
-finfo_close($fileInfo);
 
+// Проверка основного файла
+$mimeType = finfo_file($fileInfo, $_FILES['file']['tmp_name']);
 if (!array_key_exists($mimeType, $allowedMimeTypes)) {
     http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'Недопустимый тип файла']);
+    echo json_encode(['success' => false, 'message' => 'Недопустимый тип основного файла']);
     exit;
 }
 
-// Проверка безопасности файла
+// Проверка постера для видео
+if ($mediaType === 'video') {
+    $posterMimeType = finfo_file($fileInfo, $_FILES['poster']['tmp_name']);
+    if (!in_array($posterMimeType, ['image/jpeg', 'image/png'])) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Постер должен быть изображением (JPEG или PNG)']);
+        exit;
+    }
+}
+
+finfo_close($fileInfo);
+
+// Проверка безопасности файлов
 $dangerousExtensions = ['php', 'phtml', 'html', 'htm', 'js', 'exe'];
+
 $originalExtension = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
 if (in_array($originalExtension, $dangerousExtensions)) {
     http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'Недопустимое расширение файла']);
+    echo json_encode(['success' => false, 'message' => 'Недопустимое расширение основного файла']);
     exit;
+}
+
+if ($mediaType === 'video') {
+    $posterExtension = strtolower(pathinfo($_FILES['poster']['name'], PATHINFO_EXTENSION));
+    if (in_array($posterExtension, $dangerousExtensions)) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Недопустимое расширение постера']);
+        exit;
+    }
 }
 
 try {
@@ -113,23 +162,36 @@ try {
 
     // Генерируем уникальное имя файла
     $timestamp = time();
-    $randomString = bin2hex(random_bytes(4)); // 8 символов
-    $extension = $allowedMimeTypes[$mimeType];
-    $filename = $timestamp . '_' . $randomString . '.' . $extension;
+    $randomString = bin2hex(random_bytes(4));
+    $baseFilename = $timestamp . '_' . $randomString;
+
+    // Определяем расширения
+    $fileExtension = $allowedMimeTypes[$mimeType];
+    $filename = $baseFilename . '.' . $fileExtension;
     $filepath = $uploadDir . '/' . $filename;
 
-    // Обработка файла в зависимости от типа
+    // Обработка файлов
     if ($mediaType === 'image') {
-        processImage($_FILES['file']['tmp_name'], $filepath, $mimeType);
+        processImage($_FILES['file']['tmp_name'], $filepath, $webpSupported);
+        $posterPath = '';
     } else {
-        // Для видео просто перемещаем файл
+        // Для видео обрабатываем постер и сохраняем видео
+        $posterExtension = $webpSupported ? 'webp' : 'jpg';
+        $posterFilename = $baseFilename . '.' . $posterExtension;
+        $posterPath = $uploadDir . '/' . $posterFilename;
+
+        // Обрабатываем постер
+        processImage($_FILES['poster']['tmp_name'], $posterPath, $webpSupported);
+
+        // Сохраняем видео
         if (!move_uploaded_file($_FILES['file']['tmp_name'], $filepath)) {
             throw new Exception('Не удалось сохранить видео файл');
         }
     }
 
     // Сохраняем информацию о файле в базу данных
-    saveToDatabase($block, $title, $mediaType, $filename, $filepath);
+    $posterUrl = ($mediaType === 'video') ? '/gallery/' . $block . '/' . $baseFilename . '.' . ($webpSupported ? 'webp' : 'jpg') : '';
+    saveToDatabase($block, $title, $mediaType, $filename, $filepath, $posterUrl);
 
     // Формируем URL для доступа к файлу
     $fileUrl = '/gallery/' . $block . '/' . $filename;
@@ -143,7 +205,9 @@ try {
             'url' => $fileUrl,
             'type' => $mediaType,
             'block' => $block,
-            'title' => $title
+            'title' => $title,
+            'poster' => $posterUrl,
+            'webp_used' => $webpSupported
         ]
     ]);
 
@@ -156,9 +220,9 @@ try {
 }
 
 /**
- * Обработка изображения с помощью ImageMagick
+ * Обработка изображения с автоматическим выбором формата
  */
-function processImage($sourcePath, $destinationPath, $mimeType) {
+function processImage($sourcePath, $destinationPath, $useWebP) {
     if (!extension_loaded('imagick')) {
         throw new Exception('ImageMagick не установлен');
     }
@@ -171,28 +235,37 @@ function processImage($sourcePath, $destinationPath, $mimeType) {
 
     // Вычисляем новые размеры с сохранением пропорций
     $maxSize = 500;
-    $ratio = $originalWidth / $originalHeight;
 
-    if ($originalWidth > $originalHeight) {
-        $newWidth = $maxSize;
-        $newHeight = round($maxSize / $ratio);
+    if ($originalWidth > $maxSize || $originalHeight > $maxSize) {
+        $ratio = $originalWidth / $originalHeight;
+
+        if ($originalWidth > $originalHeight) {
+            $newWidth = $maxSize;
+            $newHeight = round($maxSize / $ratio);
+        } else {
+            $newHeight = $maxSize;
+            $newWidth = round($maxSize * $ratio);
+        }
+
+        // Изменяем размер
+        $image->resizeImage($newWidth, $newHeight, Imagick::FILTER_LANCZOS, 1);
+    }
+
+    // Устанавливаем формат и качество
+    if ($useWebP) {
+        $image->setImageFormat('webp');
+        $image->setImageCompressionQuality(100);
+        // Убираем метаданные для уменьшения размера
+        $image->stripImage();
     } else {
-        $newHeight = $maxSize;
-        $newWidth = round($maxSize * $ratio);
-    }
-
-    // Изменяем размер
-    $image->resizeImage($newWidth, $newHeight, Imagick::FILTER_LANCZOS, 1);
-
-    // Устанавливаем качество
-    if ($mimeType === 'image/jpeg') {
-        $image->setImageCompressionQuality(85);
+        // Fallback на JPEG для изображений и постеров
         $image->setImageFormat('jpeg');
-    } elseif ($mimeType === 'image/png') {
-        $image->setImageFormat('png');
-        // Для PNG можно установить сжатие
-        $image->setImageCompressionQuality(95);
+        $image->setImageCompressionQuality(85);
     }
+
+    // Оптимизация изображения
+    $image->setImageCompression(Imagick::COMPRESSION_JPEG);
+    $image->setInterlaceScheme(Imagick::INTERLACE_PLANE);
 
     // Сохраняем изображение
     if (!$image->writeImage($destinationPath)) {
@@ -205,15 +278,13 @@ function processImage($sourcePath, $destinationPath, $mimeType) {
 /**
  * Сохранение информации о файле в базу данных
  */
-function saveToDatabase($block, $title, $type, $filename, $filepath) {
-    // Подключаем конфигурацию БД
+function saveToDatabase($block, $title, $type, $filename, $filepath, $posterUrl = '') {
     require_once '../config.php';
 
     try {
         $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4", DB_USER, DB_PASS);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // Получаем ID галереи по типу
         $galleryTypeMap = [
             'other' => 'souvenirs',
             'useful' => 'home',
@@ -232,19 +303,16 @@ function saveToDatabase($block, $title, $type, $filename, $filepath) {
 
         $galleryId = $gallery['id'];
 
-        // Определяем порядок (item_order)
         $orderStmt = $pdo->prepare("SELECT MAX(item_order) as max_order FROM gallery_items WHERE gallery_id = ?");
         $orderStmt->execute([$galleryId]);
         $orderData = $orderStmt->fetch(PDO::FETCH_ASSOC);
         $itemOrder = ($orderData['max_order'] !== null) ? $orderData['max_order'] + 1 : 0;
 
-        // Формируем полный URL для src
         $src = '/gallery/' . $block . '/' . $filename;
 
-        // Вставляем запись в базу
         $insertStmt = $pdo->prepare("
             INSERT INTO gallery_items (gallery_id, item_order, title, type, src, poster)
-            VALUES (?, ?, ?, ?, ?, '')
+            VALUES (?, ?, ?, ?, ?, ?)
         ");
 
         $insertStmt->execute([
@@ -252,7 +320,8 @@ function saveToDatabase($block, $title, $type, $filename, $filepath) {
             $itemOrder,
             $title,
             $type,
-            $src
+            $src,
+            $posterUrl
         ]);
 
     } catch (PDOException $e) {
