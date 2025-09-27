@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 import { Swiper } from "swiper/react";
 import { A11y } from "swiper/modules";
 import { StyledSwiperSlide, StyledSwiperContainer, StyledNavigationButton } from "../../layout/gallery-element/styles";
@@ -12,6 +12,14 @@ import SubmitMessage, { colorMessage } from "../../ui/submit-message/submit-mess
 function FormDeleteMedia({ slide, block, scrollId }) {
 	const [messageText, setMessageText] = useState('');
 	const [massageColor, setMassageColor] = useState('');
+
+		useEffect(() => {
+			window.setTimeout(() => {
+				if (messageText) {
+					setMessageText('');
+				}
+			}, 30000);
+		}, [messageText]);
 
 	function handleSubmit(event) {
 		event.preventDefault();
