@@ -3,15 +3,33 @@ import { Swiper } from "swiper/react";
 import { A11y } from "swiper/modules";
 import { StyledSwiperSlide, StyledSwiperContainer, StyledNavigationButton } from "../../layout/gallery-element/styles";
 import Video from "../../ui/video/video";
-import { StyledButtonDel } from "./styles";
+import { StyledButtonDel, StyledAlertMessage } from "./styles";
 import "swiper/css";
 import VisuallyHidden from "../../ui/visually-hidden/visually-hidden";
 import ReloadAnchor, { reloadAnchor } from "../../ui/reload-anchor/reload-anchor";
 import SubmitMessage, { colorMessage } from "../../ui/submit-message/submit-message";
 
+function AlertMessage({ setIsShowAlertMessage }) {
+
+	return (
+		<StyledAlertMessage>
+			<p>Вы действительно хотите удалить изображение/видео?<br />отменить действие невозможно</p>
+			<button
+				type="submit"
+			>Да</button>
+			<button
+				type="button"
+				onClick={() => { setIsShowAlertMessage(false) }}
+			>Нет</button>
+		</StyledAlertMessage>
+	)
+}
+
 function FormDeleteMedia({ slide, block, scrollId }) {
 	const [messageText, setMessageText] = useState('');
 	const [massageColor, setMassageColor] = useState('');
+	const [isShowAlertMessage, setIsShowAlertMessage] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 		useEffect(() => {
 			window.setTimeout(() => {
@@ -23,14 +41,14 @@ function FormDeleteMedia({ slide, block, scrollId }) {
 
 	function handleSubmit(event) {
 		event.preventDefault();
+		setIsShowAlertMessage(false);
 		const formData = new FormData(event.target);
-
+		setIsLoading(true);
 		fetch('/api/gallery-delete-media.php', {
 			method: 'POST',
 			body: formData,
 		}).then(async (response) => {
 			const data = await response.json();
-
 			if (response.ok && data.success) {
 				setMessageText(data.message);
 				setMassageColor(colorMessage.SUCCESS);
@@ -49,12 +67,19 @@ function FormDeleteMedia({ slide, block, scrollId }) {
 
 			setMessageText(errorMessage);
 			setMassageColor(colorMessage.ERROR);
+		}).finally(() => {
+			setIsLoading(false);
 		});
 	}
 
 	return (
 		<form onSubmit={handleSubmit}>
 			<ReloadAnchor />
+			{isShowAlertMessage && (
+				<AlertMessage
+					setIsShowAlertMessage={setIsShowAlertMessage}
+				/>
+			)}
 			<input type="hidden" name="block" value={block} />
 			{slide.type === 'video' ? (
 				<Video
@@ -71,18 +96,24 @@ function FormDeleteMedia({ slide, block, scrollId }) {
 					alt={slide.title}
 				/>
 			)}
-			<StyledButtonDel type='submit'>удалить</StyledButtonDel>
+			<StyledButtonDel
+				type='button'
+				onClick={() => { setIsShowAlertMessage(true) }}
+				disabled={isLoading}
+			>
+				{isLoading ? "Удаление..." : "Удалить" }
+				</StyledButtonDel>
 			<input
 				type="hidden"
 				name="id"
 				value={slide.id}
 			/>
 			{messageText && (
-				<SubmitMessage
-					color={massageColor}
-				>
-					{messageText}
-				</SubmitMessage>
+			<SubmitMessage
+				color={massageColor}
+			>
+				{messageText}
+			</SubmitMessage>
 			)}
 		</form>
 	)
