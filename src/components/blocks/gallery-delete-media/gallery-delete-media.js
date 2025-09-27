@@ -34,7 +34,7 @@ function FormDeleteMedia({ slide, block, scrollId }) {
 			} else {
 				console.error = error.message || errorMessage;
 			}
-		})
+		});
 	}
 
 	return (
