@@ -6,8 +6,9 @@ import Video from "../../ui/video/video";
 import { StyledButtonDel } from "./styles";
 import "swiper/css";
 import VisuallyHidden from "../../ui/visually-hidden/visually-hidden";
+import ReloadAnchor, { reloadAnchor } from "../../ui/reload-anchor/reload-anchor";
 
-function FormDeleteMedia({ slide, block }) {
+function FormDeleteMedia({ slide, block, scrollId }) {
 
 	function handleSubmit(event) {
 		event.preventDefault();
@@ -21,12 +22,13 @@ function FormDeleteMedia({ slide, block }) {
 
 			if (response.ok && data.success) {
 				console.log('Media deleted successfully');
+				console.log(scrollId);
+				reloadAnchor(scrollId);
 			} else {
 				console.error('Failed to delete media');
 			}
 		}).catch((error) => {
 			let errorMessage = 'Ошибка при отправке формы. Попробуйте повторить позже.';
-
 			if (error instanceof SyntaxError) {
 				console.error = 'Ошибка обработки ответа сервера';
 			} else {
@@ -37,6 +39,7 @@ function FormDeleteMedia({ slide, block }) {
 
 	return (
 		<form onSubmit={handleSubmit}>
+			<ReloadAnchor />
 			<input type="hidden" name="block" value={block} />
 			{slide.type === 'video' ? (
 				<Video
@@ -64,7 +67,7 @@ function FormDeleteMedia({ slide, block }) {
 }
 
 function GalleryDeleteMedia({ gallery, block }) {
-
+	const id = block + '-gallery';
 	const [showButtons, setShowButtons] = useState(false);
 	const [disabledNextButton, setDisabledNextButton] = useState(false);
 	const [disabledPrevButton, setDisabledPrevButton] = useState(true);
@@ -88,7 +91,8 @@ function GalleryDeleteMedia({ gallery, block }) {
 
 	return (
 		gallery.length > 0 ? (
-			<StyledSwiperContainer>{showButtons && (
+			<StyledSwiperContainer id={id}>
+				{showButtons && (
 				<StyledNavigationButton direction="prev" onClick={handleprev} disabled={disabledPrevButton}>
 					<VisuallyHidden>Назад</VisuallyHidden>
 				</StyledNavigationButton>
@@ -118,7 +122,7 @@ function GalleryDeleteMedia({ gallery, block }) {
 				>
 					{gallery.map((slide, index) => (
 						<StyledSwiperSlide key={index}>
-							<FormDeleteMedia slide={slide} block={block} />
+							<FormDeleteMedia slide={slide} block={block} scrollId={id} />
 						</StyledSwiperSlide>
 					))}
 				</Swiper>

@@ -7,6 +7,7 @@ import { REGEXTEXT, CLASSNAME, TEXTFORBUTTON } from "../../../costants/const";
 import validText from "../../function/valid-text";
 import getTopLeftCoordinates from "../../function/getTopLeftCoordinates";
 import ErrorMessage from "../../ui/error-message/error-message";
+import ReloadAnchor, {reloadAnchor} from "../../ui/reload-anchor/reload-anchor";
 
 function UploadFile({ block }) {
 	const titleRef = useRef(null);
@@ -21,6 +22,8 @@ function UploadFile({ block }) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [buttonText, setButtonText] = useState(TEXTFORBUTTON.send);
 	const [poster, setPoster] = useState(null);
+
+	const scrollId = block + '-upload-file';
 
 	useEffect(() => {
 		if (!textErrorMessage && !messageText) {
@@ -169,6 +172,7 @@ function UploadFile({ block }) {
 				setMessageText(data.message);
 				setMessageColor(colorMessage.SUCCESS);
 				setButtonText(TEXTFORBUTTON.success)
+				reloadAnchor(scrollId);
 			} else {
 				setMessageText(data.message + (data.error ? `: ${data.error}` : ''));
 				setMessageColor(colorMessage.ERROR);
@@ -202,8 +206,10 @@ function UploadFile({ block }) {
 
 	return (
 		<StyledForm
+			id={scrollId}
 			onSubmit={ handleSubmit }
 		>
+			<ReloadAnchor />
 			<input
 				type="hidden"
 				name="block"

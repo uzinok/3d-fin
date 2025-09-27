@@ -10,7 +10,7 @@ function EditGallery({ data, block }) {
 	}
 
 	return (
-		<section>
+		<section id={block}>
 			<Container>
 				<EditHgroup
 					block={block}
