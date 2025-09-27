@@ -13,7 +13,7 @@ export const InputField = styled.input.attrs(props => ({
 	font-size: inherit;
 	line-height: 1;
 	font-family: inherit;
-	color: inherit;
+	color: #3e1f05;
 	background-color: #ffffff;
 	border-width: 0;
 	border-radius: 6px;

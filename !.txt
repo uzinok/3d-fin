@@ -47,6 +47,19 @@ CREATE TABLE gallery_items (
     INDEX (gallery_id, item_order)
 );
 
+-- Таблица для хранения учетных данных администратора
+CREATE TABLE admin_users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    login VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Вставляем учетные данные (пароль в открытом виде, как requested)
+INSERT INTO admin_users (login, password)
+VALUES ('irknezrauko', '!17Evg11Tit86!');
+
 config.php
 
 <?php

@@ -7,11 +7,27 @@ import EditHgroup from "../../blocks/edit-hgroup/edit-hgroup";
 import Main from "../../layout/main/main";
 import EditGallery from "../../blocks/edit-gallery/edit-gallery";
 import EditBlockList from "../../blocks/edit-block-list/edit-block-list";
+import Login from "./login";
+import { isAuthenticated, logout } from "./auth";
 
 function Admin() {
 	const [data, setData] = useState({});
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(true);
+	const [authenticated, setAuthenticated] = useState(false);
+
+	useEffect(() => {
+		setAuthenticated(isAuthenticated());
+	}, []);
+
+	const handleLoginSuccess = () => {
+		setAuthenticated(true);
+	};
+
+	const handleLogout = () => {
+		logout();
+		setAuthenticated(false);
+	};
 
 	useEffect(() => {
 		const loadAllData = async () => {
@@ -42,52 +58,60 @@ function Admin() {
 				<button>Выход</button>
 			</Header>
 			<Main>
-				{data.hero && (
-				<StyledHero>
-					<StyledHeroContainer>
-						<EditHgroup
-								data={data.hero}
-								block="hero"
-						/>
-					</StyledHeroContainer>
-					</StyledHero>
+				{!authenticated && (
+					<Login onLoginSuccess={handleLoginSuccess} />
 				)}
-				{data.gallery && (
-					<EditGallery
-						loading={loading}
-						error={error}
-						block="other"
-						data={data.gallery.other}
-					/>
+				{authenticated && (
+					<>
+						{data.hero && (
+							<StyledHero>
+								<StyledHeroContainer>
+									<EditHgroup
+										data={data.hero}
+										block="hero"
+									/>
+								</StyledHeroContainer>
+							</StyledHero>
+						)}
+						{data.gallery && (
+							<EditGallery
+								loading={loading}
+								error={error}
+								block="other"
+								data={data.gallery.other}
+							/>
+						)}
+						{data.advantages && (
+							<EditBlockList
+								data={data.advantages}
+								block="advantages"
+							/>
+						)}
+						{data.gallery && (
+							<EditGallery
+								loading={loading}
+								error={error}
+								data={data.gallery.useful}
+								block="useful"
+							/>
+						)}
+						{data.social && (
+							<EditBlockList
+								data={data.social}
+								block="social"
+							/>
+						)}
+						{data.gallery && (
+							<EditGallery
+								loading={loading}
+								error={error}
+								data={data.gallery.model}
+								block="model"
+							/>
+						)}
+					</>
 				)}
-				{data.advantages && (
-					<EditBlockList
-						data={data.advantages}
-						block="advantages"
-					/>
-				)}
-				{data.gallery && (
-					<EditGallery
-						loading={loading}
-						error={error}
-						data={data.gallery.useful}
-						block="useful"
-					/>
-				)}
-				{data.social && (
-					<EditBlockList
-						data={data.social}
-						block="social"
-					/>
-				)}
-				{data.gallery && (
-					<EditGallery
-						loading={loading}
-						error={error}
-						data={data.gallery.model}
-						block="model"
-					/>
-				)}
+
 			</Main>
 		</>
 	);
