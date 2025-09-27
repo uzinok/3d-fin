@@ -1,6 +1,6 @@
 import Container from "../../layout/container/container";
 import TextAreaForEdit from "../../ui/form-elements/textarea-for-edit/textarea-for-edit";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { StyledList, StyledForm } from "./styles";
 import EditHgroup from "../edit-hgroup/edit-hgroup";
 import { REGEXTEXT, CLASSNAME, TEXTFORBUTTON } from "../../../costants/const";
@@ -24,6 +24,28 @@ function EditCard({ data, block }) {
 	const [coordinates, setCoordinates] = useState({});
 	const [textButton, setTextButton] = useState(TEXTFORBUTTON.send);
 	const [isLoading, setIsLoading] = useState(false);
+
+		useEffect(() => {
+			if (!textErrorMessage && !messageText) {
+				return;
+			}
+			const handleClickOutside = () => {
+				setTextErrorMessage('');
+				setMessageText('');
+			}
+
+			if (textErrorMessage || messageText) {
+				document.addEventListener('click', handleClickOutside);
+			}
+
+			return () => { document.removeEventListener('click', handleClickOutside); }
+		}, [textErrorMessage, messageText]);
+
+		useEffect(() => {
+			window.setTimeout(() => {
+				setTextButton(TEXTFORBUTTON.send)
+			}, 30000);
+		}, [textButton]);
 
 	const setValidInput = (elem) => {
 		elem.classList.remove(CLASSNAME);

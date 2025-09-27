@@ -1,7 +1,7 @@
 import { InputField } from "../../ui/form-elements/input-field/input-field";
 import { StyledForm, StyledInputFileWrap } from "./styles";
 import Button from "../../ui/button/button";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import SubmitMessage, { colorMessage } from "../../ui/submit-message/submit-message";
 import { REGEXTEXT, CLASSNAME, TEXTFORBUTTON } from "../../../costants/const";
 import validText from "../../function/valid-text";
@@ -21,6 +21,28 @@ function UploadFile({ block }) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [buttonText, setButtonText] = useState(TEXTFORBUTTON.send);
 	const [poster, setPoster] = useState(null);
+
+	useEffect(() => {
+		if (!textErrorMessage && !messageText) {
+			return;
+		}
+		const handleClickOutside = () => {
+			setTextErrorMessage('');
+			setMessageText('');
+		}
+
+		if (textErrorMessage || messageText) {
+			document.addEventListener('click', handleClickOutside);
+		}
+
+		return () => { document.removeEventListener('click', handleClickOutside); }
+	}, [textErrorMessage, messageText]);
+
+	useEffect(() => {
+		window.setTimeout(() => {
+			setButtonText(TEXTFORBUTTON.send)
+		}, 30000);
+	}, [buttonText]);
 
 	const setInvalidInput = (elem) => {
 		elem.focus();

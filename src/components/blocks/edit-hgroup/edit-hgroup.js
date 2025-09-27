@@ -37,6 +37,12 @@ function EditHgroup({ data, block }) {
 		return () => { document.removeEventListener('click', handleClickOutside); }
 	}, [textErrorMessage, messageText]);
 
+	useEffect(() => {
+		window.setTimeout(() => {
+			setTextButton(TEXTFORBUTTON.send)
+		}, 30000);
+	}, [textButton]);
+
 	const setInvalidInput = (elem) => {
 		elem.focus();
 		elem.classList.add(CLASSNAME);
