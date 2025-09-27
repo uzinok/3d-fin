@@ -63,6 +63,8 @@ function UploadFile({ block }) {
 		const file = e.target.files[0];
 		if (!file) return;
 
+		checkInputFile(e);
+
 		// Проверка размера файла (например, 10MB)
 		const maxSize = 10 * 1024 * 1024;
 		if (file.size > maxSize) {
@@ -97,6 +99,8 @@ function UploadFile({ block }) {
 		const file = e.target.files[0];
 		if (!file) return;
 
+		checkInputFile(e);
+
 		// Проверка размера файла (например, 10MB)
 		const maxSize = 10 * 1024 * 1024;
 		if (file.size > maxSize) {
@@ -130,8 +134,30 @@ function UploadFile({ block }) {
 		}
 	}
 
+	const checkInputFile = (e) => {
+		if (e.target.value) {
+			setValidInput(e.target);
+		} else {
+			setInvalidInput(e.target);
+		}
+	}
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
+
+		if (!newFile) {
+			setMessageText('Не выбран файл');
+			setMessageColor(colorMessage.ERROR);
+			setInvalidInput(fileRef.current);
+			return;
+		}
+
+		if (!poster && mediaType === "video") {
+			setMessageText('Не выбран постер');
+			setMessageColor(colorMessage.ERROR);
+			setInvalidInput(posterRef.current);
+			return;
+}
 
 		if (!block) {
 			setMessageText('Не получен нужный блок');
@@ -149,12 +175,6 @@ function UploadFile({ block }) {
 			setCoordinates(getTopLeftCoordinates(titleRef.current));
 			setTextErrorMessage('Некорректное описание');
 			setInvalidInput(titleRef.current);
-			return;
-		}
-
-		if (!newFile) {
-			setMessageText('Не выбран файл');
-			setMessageColor(colorMessage.ERROR);
 			return;
 		}
 
