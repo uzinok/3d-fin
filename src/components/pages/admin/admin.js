@@ -55,7 +55,11 @@ function Admin() {
 		<>
 			<Header>
 				<StyledLink to="/">Главная</StyledLink>
-				<button>Выход</button>
+				{authenticated && (
+					<button
+						onClick={handleLogout}
+					>Выход</button>
+				)}
 			</Header>
 			<Main>
 				{!authenticated && (
