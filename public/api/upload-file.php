@@ -234,7 +234,7 @@ function processImage($sourcePath, $destinationPath, $useWebP) {
     $originalHeight = $image->getImageHeight();
 
     // Вычисляем новые размеры с сохранением пропорций
-    $maxSize = 500;
+    $maxSize = 550;
 
     if ($originalWidth > $maxSize || $originalHeight > $maxSize) {
         $ratio = $originalWidth / $originalHeight;
@@ -254,7 +254,7 @@ function processImage($sourcePath, $destinationPath, $useWebP) {
     // Устанавливаем формат и качество
     if ($useWebP) {
         $image->setImageFormat('webp');
-        $image->setImageCompressionQuality(100);
+        $image->setImageCompressionQuality(99);
         // Убираем метаданные для уменьшения размера
         $image->stripImage();
     } else {
