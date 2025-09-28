@@ -8,6 +8,10 @@ export const StyledList = styled.ul`
 	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 	gap: 30px;
 
+	& li {
+		position: relative;
+	}
+
 	& a {
 		text-decoration: none;
 		color: inherit;
@@ -16,11 +20,14 @@ export const StyledList = styled.ul`
 
 export const StyledCard = styled.div`
 	display: grid;
+	align-content: start;
 	gap: 20px;
 	padding: 30px 20px;
 	border-radius: 6px;
 	background: rgba(255, 255, 255, 0.05);
 	transition: transform 0.3s ease, background 0.3s ease;
+	height: 100%;
+	box-sizing: border-box;
 
 	&:hover {
 		transform: translateY(-5px);

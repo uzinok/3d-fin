@@ -9,6 +9,7 @@ import EditGallery from "../../blocks/edit-gallery/edit-gallery";
 import EditBlockList from "../../blocks/edit-block-list/edit-block-list";
 import Login from "./login";
 import { isAuthenticated, logout } from "./auth";
+import NoIndex from "../../ui/no-index/no-index";
 
 function Admin() {
 	const [data, setData] = useState({});
@@ -53,6 +54,7 @@ function Admin() {
 
 	return (
 		<>
+			<NoIndex />
 			<Header>
 				<StyledLink to="/">Главная</StyledLink>
 				{authenticated && (

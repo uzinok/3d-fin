@@ -1,4 +1,4 @@
-const DEV_MODE = false;
+const DEV_MODE = true;
 
 export const isAuthenticated = () => {
 	if (DEV_MODE) {
