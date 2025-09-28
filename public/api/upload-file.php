@@ -254,13 +254,13 @@ function processImage($sourcePath, $destinationPath, $useWebP) {
     // Устанавливаем формат и качество
     if ($useWebP) {
         $image->setImageFormat('webp');
-        $image->setImageCompressionQuality(99);
+        $image->setImageCompressionQuality(100);
         // Убираем метаданные для уменьшения размера
         $image->stripImage();
     } else {
         // Fallback на JPEG для изображений и постеров
         $image->setImageFormat('jpeg');
-        $image->setImageCompressionQuality(85);
+        $image->setImageCompressionQuality(90);
     }
 
     // Оптимизация изображения
